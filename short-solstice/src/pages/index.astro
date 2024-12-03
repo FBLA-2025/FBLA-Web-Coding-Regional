@@ -1,8 +1,8 @@
 ---
-import TitlePage from '../components/TitlePage.astro';
-import BottomText from '../components/BottomText.astro';
-import BottomColumns from '../components/BottomColumns.astro';
-import NavBar from '../components/NavBar.astro'
+import TitlePage from "../components/TitlePage.astro";
+import BottomText from "../components/BottomText.astro";
+import BottomColumns from "../components/BottomColumns.astro";
+import NavBar from "../components/NavBar.astro";
 ---
 
 <html lang="en">
@@ -14,27 +14,19 @@ import NavBar from '../components/NavBar.astro'
     <title>Home page</title>
   </head>
   <body>
-  
-
-	<NavBar />
-
-
+    <NavBar />
 
     <section class="relative overflow-hidden">
-		<TitlePage 
-		topText="Find your job gang unless..."
-		bottomText='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sollicitudin vel nisl ac maximus. Integer ante urna, imperdiet.'
-		buttonRight = "Idk its 3:00am"
-		buttonLeft='Try now'
-		/>
+      <TitlePage
+        topText="Find your job gang unless..."
+        bottomText="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sollicitudin vel nisl ac maximus. Integer ante urna, imperdiet."
+        buttonRight="Idk its 3:00am"
+        buttonLeft="Try now"
+      />
     </section>
-<!-- end of the first section -->
+    <!-- end of the first section -->
     <section>
-        <BottomText 
-		title="AnuelAA"
-		header="Our Indentity"
-		/>
-        
+      <BottomText title="Bruzz vs huzz" header="Our Indentity" />
     </section>
   </body>
 </html>
