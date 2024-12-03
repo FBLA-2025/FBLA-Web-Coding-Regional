@@ -1,0 +1,29 @@
+---
+
+
+interface Props {
+    title: string;
+    description?: string;
+    image?: string
+}
+
+const {title, description = "Leo change this to sound cool frfr ", image = "/images"} = Astro.props;
+//Leo put the image of the logo in here as default skkibidi
+--- 
+<!doctype html>
+<html lang="en">
+    <head>
+<meta charset="UTF-8"/>
+<meta name = "description" content={description}/>
+<meta  name="viewport" content="width=device-width"/>
+<meta name="generator" content={Astro.generator}/>
+<meta property="og:image" content={image}/>
+<title>{title}</title>
+    </head>
+    <body class="min-h-screen">
+    
+    <slot />
+    </body>
+</html>
+
+        
