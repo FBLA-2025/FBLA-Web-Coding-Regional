@@ -1,0 +1,68 @@
+---
+import "../styles/Footer.css";
+
+const links = [
+  { name: "Home", href: "/" },
+  { name: "Jobs", href: "/" },
+  { name: "Companies", href: "/" },
+  { name: "Contact", href: "/contact" },
+  { name: "Log In", href: "/login" },
+];
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="footer-col">
+        <h4>TalentLink Navigation</h4>
+        <ul>
+          <!-- <li><a href="/about">About us</a></li>
+          <li><a href="/diary">GrowU Diary</a></li>
+          <li><a href="/exerciselog">Exercise log</a></li>
+          <li>
+            <a href="https://www.termsfeed.com/legal/privacy-policy/"
+              >Privacy Policy</a
+            >
+          </li> -->
+          {links.map((link) => (
+            <li>
+              <a href={link.href}>{link.name}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <!-- <div class="footer-col">
+        <h4>Helpful Links</h4>
+        <ul>
+          <li><a href="#">Web</a></li>
+          <li><a href="#">App</a></li>
+          <li><a href="#">Logging Help</a></li>
+          <li><a href="#">Subscription</a></li>
+          <li><a href="#">Other Services</a></li>
+        </ul>
+      </div> -->
+
+      <div class="footer-col">
+        <h4>Contact Us</h4>
+        <div class="social-links">
+          <img
+            alt=""
+            src="https://icones.pro/wp-content/uploads/2021/03/logo-icone-tiktok-simbolo-noir.png"
+          />
+          <img
+            alt=""
+            src="https://www.iconpacks.net/icons/2/free-instagram-logo-icon-3497-thumb.png"
+          /><i class="fab"></i>
+          <img
+            alt=""
+            src="https://freepnglogo.com/images/all_img/1691832278twitter-x-logo-png.png"
+          /><i class="fab"></i>
+          <img
+            alt=""
+            src="https://cdn-icons-png.flaticon.com/256/20/20673.png"
+          /><i class="fab"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
