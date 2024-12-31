@@ -37,7 +37,7 @@ const ApprovalList = ({ onJobSelect }) => {
             {/* <h3> */}
               {/* <span>{job.jobName}</span> */}
             {/* </h3> */}
-            {job.jobName}
+            <i class="fa-solid fa-circle-chevron-right"></i> {job.jobName}
           </div>
         ))}
       </div>
