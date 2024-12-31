@@ -1,0 +1,31 @@
+#job-info-panel {
+  width: 55%;
+  /* margin-top: 3vw; */
+  margin-bottom: 3vw;
+  margin-right: 4vw;
+  /* margin-left: 0.5vw; */
+  border-radius: 1rem;
+  border: 3px solid black;
+  overflow: hidden;
+  max-height: 70vh;
+}
+
+#header {
+  text-align: center;
+  background-color: lightgray;
+  border-bottom: 3px solid black;
+  padding: 1vw;
+  font-size: 1.2vw;
+}
+
+#job-details {
+  overflow-y: scroll;
+  height: 100%;
+  padding-bottom: 20vh;
+}
+
+#no-job-selected {
+  text-align: center;
+  font-size: 1.2vw;
+  padding: 1vw;
+}

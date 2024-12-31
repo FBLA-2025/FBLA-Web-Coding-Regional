@@ -1,0 +1,36 @@
+#approval-list {
+  width: 30%;
+  /* margin-top: 3vw; */
+  margin-bottom: 3vw;
+  margin-left: 4vw;
+  /* margin-right: 0.5vw; */
+  border-radius: 1rem;
+  border: 3px solid black;
+  overflow: hidden;
+  height: 70vh;
+}
+
+#header {
+  text-align: center;
+  background-color: lightgray;
+  border-bottom: 3px solid black;
+  padding: 1vw;
+  font-size: 1.2vw;
+}
+
+#jobs-list {
+  overflow-y: auto;
+  height: 100%;
+  padding-bottom: 20vh;
+}
+
+.job-list-item {
+  border-bottom: 3px solid black;
+  padding: 0.75vw;
+  padding-left: 1vw;
+  transition: all 0.3s ease;
+}
+.job-list-item:hover {
+  padding-left: 1.5vw;
+  cursor: pointer;
+}

@@ -1,6 +1,6 @@
 ---
-let isEmployer = false;
-let isAdmin = false;
+let isEmployer = true;
+let isAdmin = true;
 
 const links = [
   { name: "Home", href: "/" },
@@ -12,7 +12,8 @@ const links = [
 
 if (isEmployer) {
   links.push({ name: "Post a Job", href: "/jobUpload" });
-} else if (isAdmin) {
+}
+if (isAdmin) {
   links.push({ name: "Admin Hub", href: "/AdminPage" });
 }
 ---

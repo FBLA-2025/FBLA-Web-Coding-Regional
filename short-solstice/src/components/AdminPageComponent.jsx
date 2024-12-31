@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import ApprovalList from '../components/ApprovalList';
-import JobInfoPanel from '../components/JobInfoPanel';
+import ApprovalList from './ApprovalList';
+import JobInfoPanel from './JobInfoPanel';
 
-const AdminPage = () => {
+const AdminPageComponent = () => {
   const [selectedJob, setSelectedJob] = useState(null);
 
   const handleJobSelect = (job) => {
@@ -26,4 +26,4 @@ const AdminPage = () => {
   );
 };
 
-export default AdminPage;
+export default AdminPageComponent;

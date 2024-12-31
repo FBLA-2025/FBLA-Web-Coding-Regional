@@ -1,25 +1,14 @@
 ---
+import React from "react";
 import Layout from "../layouts/Layout.astro";
 import NavBar from "../components/NavBar.astro";
 import Footer from "../components/Footer.astro";
-import ApprovalList from "../components/ApprovalList.astro";
-import JobInfoPanel from "../components/JobInfoPanel.astro";
-
-let selectedJob = null;
-
-function handleJobSelect(job) {
-  selectedJob = job;
-  console.log(selectedJob)
-}
+import AdminPageComponent from "../components/AdminPageComponent.jsx";
 ---
 
 <Layout title="Admin Page">
   <NavBar />
-  <main>
-    <ApprovalList onJobSelect={handleJobSelect} />
-    <JobInfoPanel job={selectedJob} />
-  </main>
-  <!-- <h1>Post a job</h1> -->
+  <AdminPageComponent client:load />
   <Footer />
 </Layout>
 
