@@ -1,0 +1,137 @@
+[
+  {
+    "jobId": "job_001",
+    "jobName": "Software Engineer",
+    "jobType": "Full-time",
+    "salaryRange": { "minSalary": 80000, "maxSalary": 120000 },
+    "location": "Remote",
+    "industry": "Technology",
+    "experienceLevel": "Mid-level",
+    "qualifications": [
+      "Bachelor's Degree in Computer Science",
+      "3+ years of experience in software development"
+    ],
+    "skills": ["JavaScript", "React", "Node.js", "MongoDB"],
+    "responsibilities": [
+      "Develop and maintain web applications",
+      "Collaborate with cross-functional teams",
+      "Write clean, maintainable code"
+    ],
+    "companyName": "Tech Solutions Inc.",
+    "companyLogoUrl": "https://example.com/logos/techsolutions.png",
+    "companyDescription": "Innovative tech company specializing in SaaS solutions.",
+    "website": "https://techsolutions.com",
+    "postedDate": "2024-12-20",
+    "applicationDeadline": "2025-01-15",
+    "applicationLink": "https://techsolutions.com/careers/software-engineer",
+    "employmentBenefits": ["Health insurance", "401(k) match", "Remote work stipend"],
+    "workSchedule": "Flexible",
+    "tags": ["remote", "javascript", "developer"],
+    "status": "approved"
+  },
+  {
+    "jobId": "job_002",
+    "jobName": "Graphic Designer",
+    "jobType": "Part-time",
+    "salaryRange": { "minSalary": 30000, "maxSalary": 45000 },
+    "location": "New York, NY",
+    "industry": "Marketing",
+    "experienceLevel": "Entry-level",
+    "qualifications": [
+      "Portfolio of graphic design work",
+      "Proficiency in Adobe Creative Suite"
+    ],
+    "skills": ["Adobe Photoshop", "Illustrator", "Typography"],
+    "responsibilities": [
+      "Design digital and print materials",
+      "Collaborate with the marketing team",
+      "Maintain brand consistency"
+    ],
+    "companyName": "Creative Agency",
+    "companyLogoUrl": "https://example.com/logos/creativeagency.png",
+    "companyDescription": "Full-service marketing agency helping brands grow.",
+    "website": "https://creativeagency.com",
+    "postedDate": "2024-12-18",
+    "applicationDeadline": "2025-01-05",
+    "applicationLink": "https://creativeagency.com/jobs/graphic-designer",
+    "employmentBenefits": ["Paid time off", "Professional development opportunities"],
+    "workSchedule": "Monday-Wednesday, 9 AM to 1 PM",
+    "tags": ["onsite", "design", "creative"],
+    "status": "pending"
+  },
+  {
+    "jobId": "job_003",
+    "jobName": "Customer Support Specialist",
+    "jobType": "Contract",
+    "salaryRange": { "minSalary": 20, "maxSalary": 25 },
+    "location": "Austin, TX",
+    "industry": "Customer Service",
+    "experienceLevel": "Entry-level",
+    "qualifications": ["High School Diploma", "Excellent communication skills"],
+    "skills": ["Customer service", "Problem-solving", "CRM tools"],
+    "responsibilities": [
+      "Assist customers via email and phone",
+      "Resolve product-related inquiries",
+      "Document customer interactions"
+    ],
+    "companyName": "Support Pros LLC",
+    "companyLogoUrl": "https://example.com/logos/supportpros.png",
+    "companyDescription": "Providing top-notch customer support solutions.",
+    "website": "https://supportpros.com",
+    "postedDate": "2024-12-19",
+    "applicationDeadline": "2025-01-10",
+    "applicationLink": "https://supportpros.com/careers/customer-support-specialist",
+    "employmentBenefits": ["Work-from-home option", "Flexible hours"],
+    "workSchedule": "Evenings, 5 PM to 10 PM",
+    "tags": ["contract", "customer service", "remote"],
+    "status": "approved"
+  },
+  {
+    "jobName": "Balls"
+  },
+  {
+    "jobName": "Balls"
+  },
+  {
+    "jobName": "Balls"
+  },
+  {
+    "jobName": "Balls"
+  },
+  {
+    "jobName": "Balls"
+  },
+  {
+    "jobName": "Balls"
+  },
+  {
+    "jobName": "Balls"
+  },
+  {
+    "jobName": "Balls"
+  },
+  {
+    "jobName": "Balls"
+  },
+  {
+    "jobName": "Balls"
+  },
+  {
+    "jobName": "Balls"
+  },
+  {
+    "jobName": "Balls"
+  },
+  {
+    "jobName": "Balls"
+  },
+  {
+    "jobName": "Balls"
+  },
+  {
+    "jobName": "Balls"
+  },
+  {
+    "jobName": "Balls"
+  }
+]
