@@ -185,6 +185,24 @@ app.post("/sign-up/:database/:collection", async (req, res) => {
 });
 
 
+// DELETE route to remove a document by ID
+app.delete("/delete/:database/:collection/:id", async (req, res) => {
+  try {
+    const { database, collection, id } = req.params;
+
+    const Model = await getModel(database, collection);
+    const result = await Model.findByIdAndDelete(id);
+    if (!result) {
+      return res.status(404).send(`Document with ID ${id} not found.`);
+    }
+    res.status(200).send(`Document with ID ${id} deleted successfully.`);
+  } catch (err) {
+    console.error("Error in DELETE route:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 
 
 
