@@ -2,11 +2,11 @@
 import jobs from "../../dummy-data/jobs.json";
 // console.log(jobs);
 
-// interface Props {
-//   onJobSelect: (job: any) => void;
-// }
+interface Props {
+  onJobSelect: (job: any) => void;
+}
 
-const { onJobSelect } = Astro.props;
+const { onJobSelect } = Astro.props as Props;
 ---
 
 <div id="approval-list">
@@ -90,5 +90,6 @@ const { onJobSelect } = Astro.props;
   }
   .job-list-item > h3 > span:hover {
     padding-left: 0.5vw;
+    cursor: pointer;
   }
 </style>

@@ -1,45 +1,27 @@
 ---
-import jobs from "../../dummy-data/jobs.json";
-// console.log(jobs);
+const { job } = Astro.props;
 ---
 
 <div id="approval-list">
   <div id="header">
     <h2>Job Information</h2>
   </div>
-  <div id="jobs-list">
-    {
-      jobs.map((job) => (
-        <div class="job-list-item">
-          <h3>
-            <i class="fa-solid fa-circle-chevron-right" />
-            {/* <i class="fa-solid fa-chevron-right" /> */}
-            <span>{job.jobName}</span>
-          </h3>
-        </div>
-      ))
-    }
-    <!-- {
-            jobs.map((job, index) => (
-                <li key={index}>
-                    <div>
-                        <h3>{job.title}</h3>
-                        <p>{job.description}</p>
-                        <p>{job.location}</p>
-                        <p>{job.salary}</p>
-                        <p>{job.company}</p>
-                        <p>{job.email}</p>
-                        <p>{job.phone}</p>
-                        <p>{job.website}</p>
-                        <p>{job.created_at}</p>
-                    </div>
-                    <div>
-                        <button>Approve</button>
-                        <button>Reject</button>
-                    </div>
-                </li>
-            ))
-            } -->
+  <div id="job-details">
+    {job ? (
+      <div>
+        <h3>{job.jobName}</h3>
+        <p>{job.description}</p>
+        <p>{job.location}</p>
+        <p>{job.salary}</p>
+        <p>{job.company}</p>
+        <p>{job.email}</p>
+        <p>{job.phone}</p>
+        <p>{job.website}</p>
+        <p>{job.created_at}</p>
+      </div>
+    ) : (
+      <p id="no-job-selected">Select a job to see details</p>
+    )}
   </div>
 </div>
 
@@ -55,7 +37,7 @@ import jobs from "../../dummy-data/jobs.json";
     overflow: hidden;
     height: 70vh;
   }
-  
+
   #header {
     text-align: center;
     background-color: lightgray;
@@ -64,25 +46,15 @@ import jobs from "../../dummy-data/jobs.json";
     font-size: 1.2vw;
   }
 
-  #jobs-list {
+  #job-details {
     overflow-y: auto;
     height: 100%;
   }
 
-  .job-list-item {
-    border-bottom: 3px solid black;
-    padding: 0.75vw;
-    h3 {
-        font-size: 1.1vw;
-      i {
-        margin-right: 0.5vw;
-      }
-      span {
-        transition: all 0.3s ease;
-      }
-    }
+  #no-job-selected {
+    text-align: center;
+    font-size: 1.2vw;
+    padding: 1vw;
   }
-  .job-list-item > h3 > span:hover {
-    padding-left: 0.5vw;
-  }
+
 </style>
