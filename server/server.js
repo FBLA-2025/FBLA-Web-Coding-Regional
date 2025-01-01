@@ -28,9 +28,8 @@ app.use(cors());
 app.use(express.json()); // To parse JSON bodies
 
 // Import Schemas
-const productSchema = require("./models/Products");
 const userSchema = require("./models/Users");
-const employeeSchema = require("./models/Employees");
+const jobSchema = require("./models/Jobs");
 
 // Mapping of database names to their respective URIs
 const uriMap = {
@@ -80,15 +79,15 @@ const getModel = async (dbName, collectionName) => {
     // Assign the appropriate schema based on the collection name
     let schema;
     switch (collectionName) {
-      case "Products":
-        schema = productSchema;
-        break;
       case "users":
         schema = userSchema;
         break;
-      // case "Employees":
-      //   schema = employeeSchema;
-      //   break;
+      case "published_jobs":
+        schema = jobSchema;
+        break;
+      case "pending_jobs":
+        schema = jobSchema;
+        break;
       default:
         throw new Error(`No schema defined for collection: ${collectionName}`);
     }
@@ -242,7 +241,7 @@ app.delete("/delete/:database/:collection/:id", async (req, res) => {
 
 
 
-// ******************** FOR TESTING PURPOSES **********************
+// ******************** FOR TESTING PURPOSES ************************
 
 
 app.get("/find/:database/:collection", async (req, res) => {
@@ -263,7 +262,86 @@ app.get("/find/:database/:collection", async (req, res) => {
   }
 });
 
+// POST route to insert documents
+app.post("/insert/:database/:collection", async (req, res) => {
+  try {
+    const { database, collection } = req.params;
+    const Model = await getModel(database, collection);
 
+    // Check if single or multiple documents
+    if (req.body.document) {
+      // Single document insert
+      const newDocument = await Model.create(req.body.document);
+      res.status(201).json({
+        message: "Document inserted successfully",
+        insertedId: newDocument._id,
+      });
+    } else if (req.body.documents && Array.isArray(req.body.documents)) {
+      // Multiple documents insert
+      const newDocuments = await Model.insertMany(req.body.documents);
+      res.status(201).json({
+        message: `${newDocuments.length} documents inserted`,
+        insertedIds: newDocuments.map(doc => doc._id),
+      });
+    } else {
+      res.status(400).json({
+        error:
+          "Request body must contain either 'document' or 'documents' as array",
+      });
+    }
+  } catch (err) {
+    console.error("Error in POST route:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// DELETE route to remove a document by ID
+app.delete("/delete/:database/:collection/:id", async (req, res) => {
+  try {
+    const { database, collection, id } = req.params;
+
+    const Model = await getModel(database, collection);
+    const result = await Model.findByIdAndDelete(id);
+    if (!result) {
+      return res.status(404).send(`Document with ID ${id} not found.`);
+    }
+    res.status(200).send(`Document with ID ${id} deleted successfully.`);
+  } catch (err) {
+    console.error("Error in DELETE route:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PUT route to update a document by ID
+app.put("/update/:database/:collection/:id", async (req, res) => {
+  try {
+    const { database, collection, id } = req.params;
+    const updateData = req.body.update;
+
+    if (!updateData) {
+      return res.status(400).json({ error: "Update data not provided" });
+    }
+
+    const Model = await getModel(database, collection);
+    const result = await Model.findByIdAndUpdate(
+      id,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
+
+    if (!result) {
+      return res.status(404).json({ message: "Document not found" });
+    }
+
+    res.status(200).json({
+      message: "Document updated successfully",
+      modifiedDocument: result,
+    });
+  } catch (err) {
+    console.error("Error in PUT route:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // ******************** FOR TESTING PURPOSES **********************
 

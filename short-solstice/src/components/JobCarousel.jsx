@@ -1,12 +1,29 @@
 "use client";
 
-import { useState } from "react";
-import jobs from "../../dummy-data/jobs.json";
+import { useState, useEffect } from "react";
+// import jobs from "../../dummy-data/jobs.json";
 import "../styles/JobCarousel.css";
+import baseURL from "../baseURL";
 
 export default function JobCarousel() {
+  const [jobs, setJobs] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(null);
+
+  const api = baseURL();
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await api.get("/find/TalentLinkDB/published_jobs");
+        setJobs(response.data);
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      }
+    };
+
+    fetchJobs();
+  }, []);
 
   const sortedJobs = jobs
     .sort((a, b) => new Date(b.postedDate) - new Date(a.postedDate))

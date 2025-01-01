@@ -8,28 +8,23 @@ GET {{baseUrl}}/find/TalentLinkDB/users
 Content-Type: application/json
 
 ###
-
-GET {{baseUrl}}/find/UsersEmployeesDB/Users
+GET {{baseUrl}}/find/TalentLinkDB/published_jobs
 Content-Type: application/json
 
 ###
-
-GET {{baseUrl}}/find/UsersEmployeesDB/Employees
+GET {{baseUrl}}/find/TalentLinkDB/pending_jobs
 Content-Type: application/json
-
-###
 
 ###
 # Test POST /insert/:database/:collection
 ###
 # Insert a single Product
-POST {{baseUrl}}/insert/ProductsDB/Products
+POST {{baseUrl}}/insert/TalentLinkDB/users
 Content-Type: application/json
 
 {
     "document": {
-        "name": "Apple",
-        "price": 1.99
+        "test": "Apples and nanners"
     }
 }
 
@@ -42,13 +37,59 @@ Content-Type: application/json
 {
     "documents": [
         {
-            "username": "jane_doe",
-            "email": "jane@example.com"
-        },
-        {
-            "username": "john_smith",
-            "email": "john@example.com"
-        }
+    "jobName": "Software Engineer",
+    "jobType": "Full-time",
+    "salaryRange": { "minSalary": 80000, "maxSalary": 120000 },
+    "location": "Remote",
+    "experienceLevel": "Mid-level",
+    "qualifications": [
+      "Bachelor's Degree in Computer Science",
+      "3+ years of experience in software development"
+    ],
+    "skills": ["JavaScript", "React", "Node.js", "MongoDB"],
+    "responsibilities": [
+      "Develop and maintain web applications",
+      "Collaborate with cross-functional teams",
+      "Write clean, maintainable code"
+    ],
+    "companyName": "Innovatech Solutions",
+    "companyDescription": "A forward-thinking company specializing in cutting-edge software solutions.",
+    "website": "https://innovatechsolutions.com",
+    "companyEmail": "hr@innovatechsolutions.com",
+    "companyPhoneNumber": "555-123-4567",
+    "postedDate": "12-20-2024",
+    "applicationDeadline": "01-15-2025",
+    "employmentBenefits": ["Health insurance", "401(k) match", "Remote work stipend"],
+    "workSchedule": "Flexible",
+    "tags": ["remote", "javascript", "developer", "technology"]
+  },
+  {
+    "jobName": "Graphic Designer",
+    "jobType": "Part-time",
+    "salaryRange": { "minSalary": 30000, "maxSalary": 45000 },
+    "location": "New York, NY",
+    "experienceLevel": "Entry-level",
+    "qualifications": [
+      "Portfolio of graphic design work",
+      "Proficiency in Adobe Creative Suite"
+    ],
+    "skills": ["Adobe Photoshop", "Illustrator", "Typography"],
+    "responsibilities": [
+      "Design digital and print materials",
+      "Collaborate with the marketing team",
+      "Maintain brand consistency"
+    ],
+    "companyName": "Creative Visions Agency",
+    "companyDescription": "A boutique agency focused on bringing creative ideas to life.",
+    "website": "https://creativevisionsagency.com",
+    "companyEmail": "jobs@creativevisionsagency.com",
+    "companyPhoneNumber": "555-234-5678",
+    "postedDate": "12-18-2024",
+    "applicationDeadline": "01-05-2025",
+    "employmentBenefits": ["Paid time off", "Professional development opportunities"],
+    "workSchedule": "Monday-Wednesday, 9 AM to 1 PM",
+    "tags": ["onsite", "design", "creative", "marketing"]
+  }
     ]
 }
 
