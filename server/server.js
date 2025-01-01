@@ -34,7 +34,7 @@ const employeeSchema = require("./models/Employees");
 
 // Mapping of database names to their respective URIs
 const uriMap = {
-  "3pm-server-MECAZON": process.env.MONGO_URI, // For Users and Employees collections
+  "TalentLinkDB": process.env.MONGO_URI, // For Users and Employees collections
 };
 
 // Store connections and models
@@ -67,7 +67,40 @@ const getConnection = async (dbName) => {
 };
 
 // Function to get or create a model based on the database and collection name
+const getModel = async (dbName, collectionName) => {
+  console.log("getModel called with:", { dbName, collectionName });
 
+  const modelKey = `${dbName}-${collectionName}`;
+  console.log("Generated modelKey:", modelKey);
+
+  if (!models[modelKey]) {
+    console.log("Model not found in cache, creating new model");
+    const connection = await getConnection(dbName);
+
+    // Assign the appropriate schema based on the collection name
+    let schema;
+    switch (collectionName) {
+      case "Products":
+        schema = productSchema;
+        break;
+      case "users":
+        schema = userSchema;
+        break;
+      // case "Employees":
+      //   schema = employeeSchema;
+      //   break;
+      default:
+        throw new Error(`No schema defined for collection: ${collectionName}`);
+    }
+
+    models[modelKey] = connection.model(collectionName, schema, collectionName);
+    console.log(`Created new model for collection: ${collectionName}`);
+  } else {
+    console.log(`Reusing cached model for: ${modelKey}`);
+  }
+
+  return models[modelKey];
+};
 
 
 // GET route to find a specific user using id
@@ -201,6 +234,45 @@ app.delete("/delete/:database/:collection/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+
+
+
+
+
+
+
+// ******************** FOR TESTING PURPOSES **********************
+
+
+app.get("/find/:database/:collection", async (req, res) => {
+  try {
+    const { database, collection } = req.params;
+    console.log("GET request received for:", { database, collection });
+
+    const Model = await getModel(database, collection);
+    console.log("Model retrieved, executing find query");
+
+    const documents = await Model.find({}).lean();
+    console.log("Query executed, document count:", documents.length);
+
+    res.status(200).json(documents);
+  } catch (err) {
+    console.error("Error in GET route:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+
+// ******************** FOR TESTING PURPOSES **********************
+
+
+
+
+
+
+
 
 
 
