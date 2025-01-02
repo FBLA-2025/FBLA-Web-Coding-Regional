@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// import jobs from "../../dummy-data/jobs.json";
 import "../styles/JobCarousel.css";
 import baseURL from "../baseURL";
 
