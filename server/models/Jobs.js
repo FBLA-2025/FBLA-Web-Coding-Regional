@@ -69,11 +69,13 @@ const jobSchema = new mongoose.Schema({
         trim: true
     },
     postedDate: {
-        type: Date,
+        // type: Date,
+        type: String,
         required: true
     },
     applicationDeadline: {
-        type: Date,
+        // type: Date,
+        type: String,
         required: true
     },
     employmentBenefits: {

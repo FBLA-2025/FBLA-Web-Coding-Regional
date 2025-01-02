@@ -8,12 +8,14 @@
   border: 3px solid black;
   overflow: hidden;
   max-height: 70vh;
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.247);
 }
 
 #header {
   text-align: center;
   background-color: lightgray;
   border-bottom: 3px solid black;
+  font-weight: 500;
   padding: 1vw;
   font-size: 1.2vw;
 }
