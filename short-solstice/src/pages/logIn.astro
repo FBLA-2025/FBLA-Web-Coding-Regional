@@ -8,10 +8,10 @@ import NavBar from '../components/NavBar.astro';
 ---
 <NavBar />
 
-<form id="sign-up" action="/submit" method="POST">
+<form id="log-in" action="/submit" method="POST">
     <slot />
    
-<FormLayout formTitle="Sign-up">
+<FormLayout formTitle="Log-In">
 
         <!-- FormLabel Components -->
 
@@ -23,16 +23,9 @@ import NavBar from '../components/NavBar.astro';
         id="" 
         name="" 
         /> -->
-        <FormLabel
-        labelTitle="Username" 
-        inputValue="" 
-        labelFor="username" 
-        labelType="text" 
-        id="username" 
-        name="username"  />
 
         <FormLabel 
-        labelTitle="Email Address" 
+        labelTitle="Email" 
         inputValue="" 
         labelFor="email" 
         labelType="email" 
@@ -54,8 +47,8 @@ import NavBar from '../components/NavBar.astro';
               </div>
               <div class="mt-4 text-center">
                 <p class="text-sm text-gray-600">
-                  Already have an account? 
-                  <a href="/logIn" class="text-blue-500 hover:underline">Login</a>
+                  Don't have an account?
+                  <a href="/signUp" class="text-blue-500 hover:underline">Sign up</a>
                 </p>
               </div>
 
@@ -77,7 +70,7 @@ if (showPasswordCheckbox && passwordField) {
 
 
 
-const form = document.getElementById('sign-up') as HTMLFormElement | null;
+const form = document.getElementById('log-in') as HTMLFormElement | null;
 
 if (form) {
   form.addEventListener('submit', (event) => {
