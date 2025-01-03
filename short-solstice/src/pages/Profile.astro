@@ -1,11 +1,41 @@
 ---
-import Layout from "../layouts/Layout.astro"
-import NavBar from "../components/NavBar.astro"
-import Footer from "../components/Footer.astro"
+import Layout from "../layouts/Layout.astro";
+import NavBar from "../components/NavBar.astro";
+import Footer from "../components/Footer.astro";
+import ProfileHeader from "../components/ProfileHeader.astro";
+import AppliedJobs from "../components/AppliedJobs";
+import UserInfo from "../components/UserInfo";
 ---
 
 <Layout title="Profile">
-    <NavBar />
-    <h1>Profile</h1>
-    <Footer />
+  <NavBar />
+  <main class="profile-container">
+    <ProfileHeader />
+    <div class="profile-content">
+      <UserInfo client:load />
+      <AppliedJobs client:load />
+    </div>
+  </main>
+  <Footer />
 </Layout>
+
+<style>
+  .profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .profile-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .profile-content {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
