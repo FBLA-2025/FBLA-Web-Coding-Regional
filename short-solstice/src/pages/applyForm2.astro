@@ -1,0 +1,115 @@
+---
+import FormLayout from '../components/formLayout.astro';
+import FormLabel from '../components/FormLabel.astro';
+import SelectForm from '../components/selectForm.astro';
+import RadioForm from '../components/RadioForm.astro';
+import TextareaForm from '../components/TextareaForm.astro'
+import NavBar from '../components/NavBar.astro';
+---
+<NavBar />
+
+<form id="myForm" action="/submit" method="POST">
+    <slot />
+   
+<FormLayout formTitle="Job Application Form">
+
+        <!-- FormLabel Components -->
+        <FormLabel 
+        labelTitle="Phone Number" 
+        inputValue="" 
+        labelFor="phone" 
+        labelType="tel" 
+        id="phone" 
+        name="phone" 
+        />
+        <FormLabel 
+        labelTitle="Email Address" 
+        inputValue="" 
+        labelFor="email" 
+        labelType="email" 
+        id="email" 
+        name="email" 
+        />
+        
+        <!-- SelectForm Components -->
+        <SelectForm
+        selectId="languages"
+        selectName="languages"
+        label="Select your language"
+        disabledOption="Foreign Languages"
+        options={["none", "other"]}
+        />
+        
+        
+        
+        <SelectForm
+        selectId="jobRole"
+        selectName="jobRole"
+        label="Select Your Role"
+        disabledOption="Choose a role"
+        options={["Developer", "Designer", "Manager"]}
+        />
+        
+        
+        
+        
+        <RadioForm 
+        groupLabel="Are you legally authorized to work in the United States?" 
+        groupName="workAuthorization" 
+        options={[
+            { label: "Yes", value: "yes" },
+            { label: "No", value: "no" }
+        ]}
+/>
+
+<RadioForm 
+groupLabel="What is your experience level?" 
+groupName="experienceLevel" 
+options={[
+    { label: "Beginner", value: "beginner" },
+    { label: "Intermediate", value: "intermediate" },
+    { label: "Advanced", value: "advanced" }
+]}
+/>
+<TextareaForm 
+label="Tell us about yourself" 
+name="aboutMe" 
+placeholder="Write something here..." 
+id="aboutMe" 
+rows={5} 
+required={true}
+/>
+
+<TextareaForm 
+label="Additional Comments" 
+name="comments" 
+placeholder="Any extra information?" 
+id="comments" 
+rows={3}
+/>
+
+
+
+
+<button class="submit-button" type="submit">Submit Application</button>
+</FormLayout>
+</form>
+
+<script>
+
+const form = document.getElementById('myForm') as HTMLFormElement | null;
+
+if (form) {
+  form.addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevent actual form submission for testing
+    const formData = new FormData(form);
+
+    // Log each form field
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+
+    alert("Form submitted successfully!");
+  });
+}
+</script>

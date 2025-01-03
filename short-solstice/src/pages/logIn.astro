@@ -1,0 +1,88 @@
+---
+import FormLayout from '../components/formLayout.astro';
+import FormLabel from '../components/FormLabel.astro';
+import SelectForm from '../components/selectForm.astro';
+import RadioForm from '../components/RadioForm.astro';
+import TextareaForm from '../components/TextareaForm.astro'
+import NavBar from '../components/NavBar.astro';
+---
+<NavBar />
+
+<form id="log-in" action="/submit" method="POST">
+    <slot />
+   
+<FormLayout formTitle="Log-In">
+
+        <!-- FormLabel Components -->
+
+        <!-- <FormLabel
+        labelTitle="" 
+        inputValue="" 
+        labelFor="" 
+        labelType="text" 
+        id="" 
+        name="" 
+        /> -->
+
+        <FormLabel 
+        labelTitle="Email" 
+        inputValue="" 
+        labelFor="email" 
+        labelType="email" 
+        id="email" 
+        name="email" 
+        />
+        
+        <FormLabel
+        labelTitle="Password" 
+        inputValue="" 
+        labelFor="password" 
+        labelType="password" 
+        id="password" 
+        name="password"  />
+              <!-- Add a button or checkbox for toggling password visibility -->
+              <div class="flex items-center space-x-2 mt-2">
+                <label for="show-password" class="text-sm text-gray-700">Show Password</label>
+                <input type="checkbox" id="show-password" class="h-4 w-4 text-blue-500 border-gray-300 rounded" />
+              </div>
+              <div class="mt-4 text-center">
+                <p class="text-sm text-gray-600">
+                  Don't have an account?
+                  <a href="/signUp" class="text-blue-500 hover:underline">Sign up</a>
+                </p>
+              </div>
+
+
+<button class="submit-button" type="submit">Submit Application</button>
+</FormLayout>
+</form>
+
+<script>
+ const showPasswordCheckbox = document.getElementById('show-password') as HTMLInputElement;
+const passwordField = document.getElementById('password') as HTMLInputElement;
+
+if (showPasswordCheckbox && passwordField) {
+  showPasswordCheckbox.addEventListener('change', () => {
+    passwordField.type = showPasswordCheckbox.checked ? 'text' : 'password';
+  });
+}
+
+
+
+
+const form = document.getElementById('log-in') as HTMLFormElement | null;
+
+if (form) {
+  form.addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevent actual form submission for testing
+    const formData = new FormData(form);
+
+    // Log each form field
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+
+    alert("Form submitted successfully!");
+  });
+}
+</script>

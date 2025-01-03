@@ -1,0 +1,30 @@
+---
+interface Props {
+  groupLabel: string;
+  groupName: string;
+  options: {
+    label: string;
+    value: string;
+  }[];
+}
+
+const { groupLabel, groupName, options } = Astro.props;
+---
+
+<div class="radio-group">
+  <label>{groupLabel}</label>
+  <div>
+    {options.map(option => (
+      <div class="radio-item">
+        <input 
+          type="radio" 
+          id={`${groupName}-${option.value}`} 
+          name={groupName} 
+          value={option.value} 
+          required 
+        />
+        <label for={`${groupName}-${option.value}`}>{option.label}</label>
+      </div>
+    ))}
+  </div>
+</div>
