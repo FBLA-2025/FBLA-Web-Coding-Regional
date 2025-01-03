@@ -49,12 +49,15 @@ export default function JobModal({ job, onClose }) {
           </div>
           
           <div className="modal-footer">
-            <a
-              href={`/apply/${encodeURIComponent(job.jobName)}`}
-              className="apply button"
-            >
-              Apply Now
-            </a>
+
+            
+          <a
+  href={`/apply/${job._id}`}  // Pass jobId in the URL
+  className="apply button"
+>
+  Apply Now
+</a>
+
             <button
               type="button"
               onClick={onClose}
