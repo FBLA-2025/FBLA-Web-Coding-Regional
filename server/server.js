@@ -28,13 +28,12 @@ app.use(cors());
 app.use(express.json()); // To parse JSON bodies
 
 // Import Schemas
-const productSchema = require("./models/Products");
 const userSchema = require("./models/Users");
-const employeeSchema = require("./models/Employees");
+const jobSchema = require("./models/Jobs");
 
 // Mapping of database names to their respective URIs
 const uriMap = {
-  "3pm-server-MECAZON": process.env.MONGO_URI, // For Users and Employees collections
+  TalentLinkDB: process.env.MONGO_URI, // For Users and Employees collections
 };
 
 // Store connections and models
@@ -67,8 +66,40 @@ const getConnection = async (dbName) => {
 };
 
 // Function to get or create a model based on the database and collection name
+const getModel = async (dbName, collectionName) => {
+  console.log("getModel called with:", { dbName, collectionName });
 
+  const modelKey = `${dbName}-${collectionName}`;
+  console.log("Generated modelKey:", modelKey);
 
+  if (!models[modelKey]) {
+    console.log("Model not found in cache, creating new model");
+    const connection = await getConnection(dbName);
+
+    // Assign the appropriate schema based on the collection name
+    let schema;
+    switch (collectionName) {
+      case "users":
+        schema = userSchema;
+        break;
+      case "published_jobs":
+        schema = jobSchema;
+        break;
+      case "pending_jobs":
+        schema = jobSchema;
+        break;
+      default:
+        throw new Error(`No schema defined for collection: ${collectionName}`);
+    }
+
+    models[modelKey] = connection.model(collectionName, schema, collectionName);
+    console.log(`Created new model for collection: ${collectionName}`);
+  } else {
+    console.log(`Reusing cached model for: ${modelKey}`);
+  }
+
+  return models[modelKey];
+};
 
 // GET route to find a specific user using id
 app.get("/retrieve-user/:database/:collection/:userId", async (req, res) => {
@@ -81,8 +112,10 @@ app.get("/retrieve-user/:database/:collection/:userId", async (req, res) => {
 
     let user = await Model.findOne({ _id: userId }).lean();
     if (!user) {
-      console.log(`User not found in ${collection}, searching in the other collection`);
-      const otherCollection = collection === 'users' ? 'employee' : 'users';
+      console.log(
+        `User not found in ${collection}, searching in the other collection`
+      );
+      const otherCollection = collection === "users" ? "employee" : "users";
       const OtherModel = await getModel(database, otherCollection);
       user = await OtherModel.findOne({ _id: userId }).lean();
     }
@@ -98,8 +131,6 @@ app.get("/retrieve-user/:database/:collection/:userId", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-
 
 // GET route to find a user using email and password
 app.get("/log-in/:database/:collection/:email/:password", async (req, res) => {
@@ -184,6 +215,125 @@ app.post("/sign-up/:database/:collection", async (req, res) => {
   }
 });
 
+// DELETE route to remove a document by ID
+app.delete("/delete/:database/:collection/:id", async (req, res) => {
+  try {
+    const { database, collection, id } = req.params;
+
+    const Model = await getModel(database, collection);
+    const result = await Model.findByIdAndDelete(id);
+    if (!result) {
+      return res.status(404).send(`Document with ID ${id} not found.`);
+    }
+    res.status(200).send(`Document with ID ${id} deleted successfully.`);
+  } catch (err) {
+    console.error("Error in DELETE route:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST route to push a pending job to published jobs DB and remove it from pending jobs DB
+app.post("/approve-pending-job/:database/:collection", async (req, res) => {
+  try {
+    const { database, collection } = req.params;
+    // const { pendingJob } = req.body;
+    // console.log("Req.body,", req.body);
+    // console.log("Pending job, ", pendingJob)
+    const Model = await getModel(database, collection);
+    const publishedModel = await getModel(database, "published_jobs");
+
+    if (req.body) {
+      // Insert the document into the published jobs collection
+      const newJob = await publishedModel.create(req.body);
+
+      // Remove the document from the pending jobs collection
+      await Model.deleteOne({ _id: req.body._id });
+
+      res.status(201).json({
+        message: "Document inserted and removed from pending jobs successfully",
+        insertedId: newJob._id,
+      });
+    } else {
+      res.status(400).json({
+        error:
+          "Request body must contain a document",
+      });
+    }
+  } catch (err) {
+    console.error("Error in POST route:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Delete route to remove a job from the pending jobs collection
+app.delete("/reject-pending-job/:database/:collection/:id", async (req, res) => {
+  try {
+    const { database, collection, id } = req.params;
+
+    const Model = await getModel(database, collection);
+    const result = await Model.findByIdAndDelete(id);
+    if (!result) {
+      return res.status(404).send(`Document with ID ${id} not found.`);
+    }
+    res.status(200).send(`Document with ID ${id} deleted successfully.`);
+  } catch (err) {
+    console.error("Error in DELETE route:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ******************** FOR TESTING PURPOSES ************************
+
+app.get("/find/:database/:collection", async (req, res) => {
+  try {
+    const { database, collection } = req.params;
+    console.log("GET request received for:", { database, collection });
+
+    const Model = await getModel(database, collection);
+    console.log("Model retrieved, executing find query");
+
+    const documents = await Model.find({}).lean();
+    console.log("Query executed, document count:", documents.length);
+
+    res.status(200).json(documents);
+  } catch (err) {
+    console.error("Error in GET route:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST route to insert documents
+app.post("/insert/:database/:collection", async (req, res) => {
+  try {
+    const { database, collection } = req.params;
+    const Model = await getModel(database, collection);
+
+    // Check if single or multiple documents
+    if (req.body.document) {
+      // Single document insert
+      const newDocument = await Model.create(req.body.document);
+      res.status(201).json({
+        message: "Document inserted successfully",
+        insertedId: newDocument._id,
+      });
+    } else if (req.body.documents && Array.isArray(req.body.documents)) {
+      // Multiple documents insert
+      const newDocuments = await Model.insertMany(req.body.documents);
+      res.status(201).json({
+        message: `${newDocuments.length} documents inserted`,
+        insertedIds: newDocuments.map((doc) => doc._id),
+      });
+    } else {
+      res.status(400).json({
+        error:
+          "Request body must contain either 'document' or 'documents' as array",
+      });
+    }
+  } catch (err) {
+    console.error("Error in POST route:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // DELETE route to remove a document by ID
 app.delete("/delete/:database/:collection/:id", async (req, res) => {
@@ -202,9 +352,38 @@ app.delete("/delete/:database/:collection/:id", async (req, res) => {
   }
 });
 
+// PUT route to update a document by ID
+app.put("/update/:database/:collection/:id", async (req, res) => {
+  try {
+    const { database, collection, id } = req.params;
+    const updateData = req.body.update;
 
+    if (!updateData) {
+      return res.status(400).json({ error: "Update data not provided" });
+    }
 
+    const Model = await getModel(database, collection);
+    const result = await Model.findByIdAndUpdate(
+      id,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
 
+    if (!result) {
+      return res.status(404).json({ message: "Document not found" });
+    }
+
+    res.status(200).json({
+      message: "Document updated successfully",
+      modifiedDocument: result,
+    });
+  } catch (err) {
+    console.error("Error in PUT route:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ******************** FOR TESTING PURPOSES **********************
 
 // Test connections before starting server
 async function startServer() {
@@ -214,7 +393,6 @@ async function startServer() {
       PORT: process.env.PORT || 3000,
     });
     console.log("Raw URIs:", {
-
       server: process.env.MONGO_URI,
     });
 

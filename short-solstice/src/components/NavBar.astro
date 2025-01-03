@@ -1,22 +1,13 @@
 ---
-let isEmployer = true;
-let isAdmin = true;
-
 const links = [
-  { name: "Home", href: "/" },
-  { name: "Jobs", href: "/" },
-  { name: "Companies", href: "/" },
-  { name: "Contact", href: "/contact" },
-  { name: "Log In", href: "/login" },
-  {name: "apply", href: "/applyForm"}
+  { name: "Home", href: "/", id: "home" },
+  { name: "Jobs", href: "/JobsPage", id: "jobs" },
+  // { name: "Companies", href: "/" },
+  // { name: "Contact", href: "/Contact" },
+  { name: "About", href: "/About", id: "about" },
+  { name: "apply", href: "/ApplyForm", id: "apply" },
+  // { name: "Log In", href: "/Login", id: "login" },
 ];
-
-if (isEmployer) {
-  links.push({ name: "Post a Job", href: "/jobUpload" });
-}
-if (isAdmin) {
-  links.push({ name: "Admin Hub", href: "/AdminPage" });
-}
 ---
 
 <nav class="bg-white border-b border-gray-200 shadow-md">
@@ -25,12 +16,12 @@ if (isAdmin) {
       <div class="flex-shrink-0 flex items-center">
         <a href="/" class="text-2xl font-bold text-blue-600">TalentLink</a>
       </div>
-      <div class="hidden md:flex items-center space-x-4" id="nav-links">
+      <div class="hidden md:flex items-center space-x-4 nav-links">
         {
           links.map((link) => (
             <a
               href={link.href}
-              class="text-gray-800 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium"
+              class={`text-gray-800 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium ${link.id}`}
             >
               {link.name}
             </a>
@@ -57,12 +48,12 @@ if (isAdmin) {
   </div>
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="md:hidden hidden">
-    <div class="px-2 pt-2 pb-3 space-y-1">
+    <div class="px-2 pt-2 pb-3 space-y-1 nav-links">
       {
         links.map((link) => (
           <a
             href={link.href}
-            class="block text-gray-800 hover:text-blue-500 px-3 py-2 rounded-md text-base font-medium"
+            class={`block text-gray-800 hover:text-blue-500 px-3 py-2 rounded-md text-base font-medium ${link.id}`}
           >
             {link.name}
           </a>
@@ -72,12 +63,74 @@ if (isAdmin) {
   </div>
 </nav>
 
-<!-- Script for toggling mobile menu -->
+<!-- Script for toggling mobile menu and handling NavBar changes -->
 <script>
-  const mobileMenuButton = document.getElementById("mobile-menu-button");
-  const mobileMenu = document.getElementById("mobile-menu");
+  document.addEventListener("DOMContentLoaded", () => {
+    localStorage.setItem("isAdmin", "true");
+    localStorage.setItem("isEmployer", "true");
+    localStorage.setItem("loggedIn", "true");
+    const navLinks = document.querySelectorAll(".nav-links");
 
-  mobileMenuButton?.addEventListener("click", () => {
-    mobileMenu?.classList.toggle("hidden");
+    if (localStorage.getItem("isAdmin") === "true") {
+      const adminLink = document.createElement("a");
+      adminLink.href = "/AdminPage";
+      adminLink.className =
+        "text-gray-800 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium";
+      adminLink.textContent = "Admin Hub";
+      const adminLinkMobile = document.createElement("a");
+      adminLinkMobile.href = "/AdminPage";
+      adminLinkMobile.className =
+        "block text-gray-800 hover:text-blue-500 px-3 py-2 rounded-md text-base font-medium";
+      adminLinkMobile.textContent = "Admin Hub";
+      navLinks[0].appendChild(adminLink);
+      navLinks[1].appendChild(adminLinkMobile);
+    }
+
+    if (localStorage.getItem("isEmployer") === "true") {
+      const postJobLink = document.createElement("a");
+      postJobLink.href = "/JobUpload";
+      postJobLink.className =
+        "text-gray-800 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium";
+      postJobLink.textContent = "Post a Job";
+      const postJobLinkMobile = document.createElement("a");
+      postJobLinkMobile.href = "/JobUpload";
+      postJobLinkMobile.className =
+        "block text-gray-800 hover:text-blue-500 px-3 py-2 rounded-md text-base font-medium";
+      postJobLinkMobile.textContent = "Post a Job";
+      navLinks[0].appendChild(postJobLink);
+      navLinks[1].appendChild(postJobLinkMobile);
+    }
+
+    const loginLink = document.createElement("a");
+    loginLink.href = "/Login";
+    loginLink.className =
+      "text-gray-800 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium login";
+    loginLink.textContent = "Log In";
+    const loginLinkMobile = document.createElement("a");
+    loginLinkMobile.href = "/Login";
+    loginLinkMobile.className =
+      "block text-gray-800 hover:text-blue-500 px-3 py-2 rounded-md text-base font-medium login";
+    loginLinkMobile.textContent = "Log In";
+    navLinks[0].appendChild(loginLink);
+    navLinks[1].appendChild(loginLinkMobile);
+
+    if (localStorage.getItem("loggedIn") === "true") {
+      // const loginLink = document.querySelectorAll(".login") as HTMLAnchorElement;
+      const loginLinks = document.querySelectorAll(".login");
+      if (loginLinks) {
+        loginLinks.forEach((loginLink) => {
+          const anchor = loginLink as HTMLAnchorElement;
+          anchor.href = "/Profile";
+          anchor.textContent = "Profile";
+        });
+      }
+    }
+    const mobileMenuButton = document.getElementById("mobile-menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    mobileMenuButton?.addEventListener("click", () => {
+      mobileMenu?.classList.toggle("hidden");
+      console.log("clicked");
+    });
   });
 </script>

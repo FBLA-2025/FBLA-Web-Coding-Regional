@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "../styles/ApprovalList.css";
-import jobs from "../../dummy-data/jobs.json";
+import baseURL from "../baseURL";
 
 const ApprovalList = ({ onJobSelect }) => {
+  const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
 
   const handleJobClick = (job) => {
@@ -16,9 +17,21 @@ const ApprovalList = ({ onJobSelect }) => {
     }
   };
 
+  const api = baseURL();
+
   useEffect(() => {
-    console.log("ApprovalList mounted");
+    const fetchJobs = async () => {
+      try {
+        const response = await api.get("/find/TalentLinkDB/pending_jobs");
+        setJobs(response.data);
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      }
+    };
+
+    fetchJobs();
   }, []);
+
 
   return (
     <div id="approval-list">
@@ -26,7 +39,8 @@ const ApprovalList = ({ onJobSelect }) => {
         <h2>Pending For Approval</h2>
       </div>
       <div id="jobs-list">
-        {jobs.map((job) => (
+        { jobs.length !== 0 ? (
+        jobs.map((job) => (
           <div
             className="job-list-item"
             onClick={() => {
@@ -37,9 +51,13 @@ const ApprovalList = ({ onJobSelect }) => {
             {/* <h3> */}
               {/* <span>{job.jobName}</span> */}
             {/* </h3> */}
-            {job.jobName}
+            <i class="fa-solid fa-circle-chevron-right"></i> {job.jobName}
           </div>
-        ))}
+        ))
+      ) : (
+        <p id="no-pending-jobs">No pending jobs</p>
+      )
+      }
       </div>
     </div>
   );

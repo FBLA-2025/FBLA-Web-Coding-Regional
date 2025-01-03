@@ -1,32 +1,18 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import TitlePage from "../components/TitlePage.astro";
-import BottomText from "../components/BottomText.astro";
-import BottomColumns from "../components/BottomColumns.astro";
-import NavBar from "../components/NavBar.astro";
-import Footer from "../components/Footer.astro";
+import NavBar from '../components/NavBar.astro';
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Identity from '../components/Identity.astro';
+import JobCarousel from '../components/JobCarousel';
+import Footer from '../components/Footer.astro';
 ---
 
-<Layout title="Home ">
-    <NavBar />
-
-    <section class="relative overflow-hidden">
-      <TitlePage
-        topText="Find your job gang unless..."
-        bottomText="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sollicitudin vel nisl ac maximus. Integer ante urna, imperdiet."
-        buttonRight="Idk its 3:00am"
-        buttonLeft="Try now"
-      />
-    </section>
-    <!-- end of the first section -->
-    <section>
-      <BottomText title="Bruzz vs huzz" header="Our Indentity" />
-    </section>
+<Layout title="TalentLink Home Page">
+  <NavBar />
+  <main class="min-h-screen flex flex-col">
+    <Header />
+    <Identity />
+    <JobCarousel client:load />
     <Footer />
-  </body>
-</html>
+  </main>
 </Layout>
-
-<style></style>
-
-<script></script>

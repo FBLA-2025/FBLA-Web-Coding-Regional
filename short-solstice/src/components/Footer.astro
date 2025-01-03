@@ -1,5 +1,4 @@
 ---
-// import { Button } from '@/components/ui/button';
 let isEmployer = true;
 let isAdmin = true;
 
@@ -32,36 +31,21 @@ if (isAdmin) {
               </a>
             ))
           }
-          {
-            /* <a href="/" class="link">Home</a>
-          <a href="/jobs" class="link">Job Board</a>
-          <a href="/employers" class="link">Employers</a>
-          <a href="/resources" class="link">Student Resources</a> */
-          }
-        </nav>
-      </div>
-      <div class="links">
-        <h3 class="title">Contact Career Services</h3>
-        <nav class="nav">
-          <a href="/contact" class="link">Schedule Appointment</a>
-          <a href="/events" class="link">Career Events</a>
-          <a href="/workshops" class="link">Workshops</a>
         </nav>
       </div>
       <div class="subscribe">
         <div class="subscribe-box">
           <h3 class="title">Stay Connected</h3>
           <p class="description">
-            Subscribe to receive updates about new job opportunities and career
-            events.
+            Subscribe to receive updates about new job opportunities!
           </p>
-          <form class="form">
+          <form class="subscribe-form">
             <input
               type="email"
               placeholder="Enter your school email"
-              class="input"
+              class="subscribe-input"
             />
-            <button class="button"> Subscribe </button>
+            <button class="subscribe-button"> Subscribe </button>
           </form>
         </div>
       </div>
@@ -73,7 +57,7 @@ if (isAdmin) {
 </footer>
 
 <style>
-  .footer {
+  /* .footer {
     background-color: #1a202c;
     color: #f7fafc;
   }
@@ -85,6 +69,7 @@ if (isAdmin) {
   .grid {
     display: grid;
     grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 2rem;
   }
   @media (min-width: 768px) {
@@ -165,6 +150,95 @@ if (isAdmin) {
   .footer-bottom {
     border-top: 1px solid #2d3748;
     margin-top: 3rem;
+    padding-top: 2rem;
+    text-align: center;
+    color: #a0aec0;
+  } */
+
+  .footer {
+    background-color: #1a202c;
+    color: #f7fafc;
+    padding: 2rem;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .links,
+  .subscribe {
+    display: flex;
+    flex-direction: column;
+  }
+  .title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.5rem;
+  }
+  .link {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+  }
+  .link:hover {
+    color: #0971e9;
+    padding-left: 0.5vw;
+  }
+  .subscribe-box {
+    background-color: #2d3748;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    /* gap: 1rem; */
+    padding: 1.5rem;
+  }
+  .description {
+    color: #a0aec0;
+    margin-bottom: 1rem;
+  }
+  .subscribe-form {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .subscribe-input {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    background-color: #4a5568;
+    color: #ffffff;
+    border: none;
+    outline: none;
+  }
+  .subscribe-input::placeholder {
+    color: #a0aec0;
+  }
+  .subscribe-input:focus {
+    outline: 2px solid #0971e9;
+  }
+  .subscribe-button {
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 0.25rem;
+  }
+  .subscribe-button:hover {
+    background-color: #0056b3;
+  }
+  .footer-bottom {
+    border-top: 1px solid #2d3748;
+    margin-top: 0.5rem;
     padding-top: 2rem;
     text-align: center;
     color: #a0aec0;
