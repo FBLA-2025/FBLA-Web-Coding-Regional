@@ -1,0 +1,31 @@
+---
+interface Props {
+  labelTitle: string;
+  inputValue: string;
+  labelFor: string;
+  labelType: "text" | "password" | "email" | "number" | "tel" | "url";
+  id: string;
+  name: string;
+  pattern?: string; // Optional pattern for input validation
+}
+
+const { labelTitle, inputValue, labelFor, labelType, id, name, pattern } = Astro.props;
+---
+<div id="container">   
+
+  <label for={labelFor}>{labelTitle}</label>
+  <input 
+  type={labelType} 
+  id={id} 
+  name={name} 
+  value={inputValue} 
+  placeholder={labelTitle} 
+  pattern={pattern} 
+  required 
+  />
+</div>
+
+<style>
+
+</style>
+  
