@@ -1,14 +1,15 @@
 .job-card {
   background-color: white;
   border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1.5rem;
   padding: 1.5rem;
-  transition: box-shadow 0.2s;
+  transition: all 0.2s;
   cursor: pointer;
 }
 
 .job-card:hover {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 7px 8px rgba(0, 60, 255, 0.3);
 }
 
 .job-card-header {

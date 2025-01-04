@@ -1,0 +1,26 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ApplicantDetailsBody from '../components/ApplicantDetailsBody';
+---
+
+<Layout title="Applicant Details | TalentLink">
+  <main class="applicant-details-container">
+    <h1>Applicant Details</h1>
+    <ApplicantDetailsBody client:load />
+  </main>
+</Layout>
+
+<style>
+  .applicant-details-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  h1 {
+    color: #111827;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+</style>
+

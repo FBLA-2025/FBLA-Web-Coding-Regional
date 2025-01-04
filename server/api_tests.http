@@ -111,8 +111,8 @@ Content-Type: application/json
 # Test DELETE /delete/:database/:collection/:id
 ###
 # Delete a User (Replace {user_id} with an actual ID)
-@user_id = 6775ca72512e1dbc554f4114
-DELETE {{baseUrl}}/delete/TalentLinkDB/pending_jobs/{{user_id}}
+@user_id = 6775e507650ebc1a40cc5f97
+DELETE {{baseUrl}}/delete/TalentLinkDB/published_jobs/{{user_id}}
 Content-Type: application/json
 
 ###
