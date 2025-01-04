@@ -78,7 +78,7 @@ export async function getStaticPaths() {
 <form id="myForm" action="/submit" method="POST">
   <slot />
   
-  <FormLayout formTitle={jobName}>  <!-- Pass job.jobName as formTitle -->
+  <FormLayout formTitle={jobName ?? "Default Job Name"}>  <!-- Pass job.jobName as formTitle -->
 
         <!-- FormLabel Components -->
         <FormLabel 
