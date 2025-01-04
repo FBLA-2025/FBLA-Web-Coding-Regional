@@ -6,67 +6,71 @@ import RadioForm from '../../components/RadioForm.astro';
 import TextareaForm from '../../components/TextareaForm.astro'
 import NavBar from '../../components/NavBar.astro';
 import baseURL from "../../baseURL";
+import JobPageBody from "../../components/JobPageBody.jsx";
 import axios from "axios";
 import ApprovalList from '../../components/ApprovalList';
+import JobModal from '../../components/JobModal';
 
 
+
+const { job }: { job: Job } = Astro.props;
+
+console.log("Job Prop:", job);  // Debugging line to log the job object
 // Define the Job interface
 interface Job {
-  _id: string; // Or 'number' depending on your ID type
-  jobName: string;  // Example property, adjust based on your actual data
+  _id: string;
+  jobName: string;
 }
 
+const api = baseURL();
+let jobs: Job[] = [];
+const response = await api.get('/find/TalentLinkDB/published_jobs');
+jobs = response.data; // Store the list of jobs
 
+// Extract jobName and jobId
+let jobNames = jobs.map((job: Job) => ({
+  jobId: job._id,
+  jobName: job.jobName
+}));
 
-// Fetch the job data and generate paths for each jobId
+// Get the last part of the URL
+const pathSegments = Astro.url.pathname.split('/'); 
+const lastPart = pathSegments[pathSegments.length - 1]; // Get the last segment (jobId)
+console.log("Last part of the URL:", lastPart);
+
+// Find the jobName that matches the jobId
+let jobName: string | undefined;
+
+jobNames.forEach((job) => {
+  if (job.jobId === lastPart) {
+    jobName = job.jobName; // Store the jobName
+  }
+});
+
+console.log("Matched jobName:", jobName);
 export async function getStaticPaths() {
-  const api = baseURL(); // Replace with your actual base URL or API endpoint
+  const api = baseURL();
   let jobs: Job[] = [];
 
+  
   try {
-    const response = await api.get('/find/TalentLinkDB/published_jobs'); // Make sure this API returns a list of jobs
+    const response = await api.get('/find/TalentLinkDB/published_jobs');
     jobs = response.data; // Store the list of jobs
-    console.log(jobs)
   } catch (error) {
     console.error("Error fetching jobs:", error);
   }
 
-  // Return an array of paths based on job IDs and jobNames
+  // Return the paths and include jobName
   return jobs.map((job: Job) => ({
     params: { 
       jobId: job._id.toString(),
-      jobName: encodeURIComponent(job.jobName) // Pass the jobName in the params
+      jobName: job.jobName
+      
     }
+    
   }));
+
 }
-
-const { jobId, jobName } = Astro.params;
-
-console.log("Job ID:", jobId);
-console.log("Job Name:", jobName);
-// Extract the last segment of the URL path
-const pathSegments = Astro.url.pathname.split('/'); // Split the URL by '/'
-const lastPart = pathSegments[pathSegments.length - 1]; // Get the last segment
-console.log("Last part of the URL:", lastPart); // Logs the last part, even if there are multiple '/' segments
-// const api = baseURL(); // Replace with your actual base URL or API endpoint
-//   let jobs: Job[] = [];
-
-//   try {
-//     const response = await api.get('/find/TalentLinkDB/published_jobs'); // Make sure this API returns a list of jobs
-//     jobs = response.data; // Store the list of jobs
-
-//   } catch (error) {
-//     console.error("Error fetching jobs:", error);
-//   }
-
-//   // Return an array of paths based on job IDs
-//    jobs.map((job: Job) => ({
-//     params: { jobId: job._id.toString() }  // Ensure the jobId is passed as a string
-//   }));
-//   console.log(jobs.map((job: Job) => ({
-//   params: { jobId: job._id.toString() }  // Ensure the jobId is passed as a string
-// })));
-
 ---
 
 <NavBar />
@@ -74,12 +78,28 @@ console.log("Last part of the URL:", lastPart); // Logs the last part, even if t
 <form id="myForm" action="/submit" method="POST">
   <slot />
   
-  
-  <FormLayout formTitle={jobId}>
+  <FormLayout formTitle={jobName}>  <!-- Pass job.jobName as formTitle -->
 
         <!-- FormLabel Components -->
         <FormLabel 
-        labelTitle="hi" 
+        labelTitle="Name" 
+        inputValue="" 
+        labelFor="phone" 
+        labelType="text" 
+        id="name" 
+        name="name" 
+        />
+
+        <FormLabel 
+        labelTitle="Last Name" 
+        inputValue="" 
+        labelFor="last-name" 
+        labelType="text" 
+        id="last-name" 
+        name="last-name" 
+        />
+        <FormLabel 
+        labelTitle="Phone Number" 
         inputValue="" 
         labelFor="phone" 
         labelType="tel" 
@@ -94,12 +114,28 @@ console.log("Last part of the URL:", lastPart); // Logs the last part, even if t
         id="email" 
         name="email" 
         />
-        
+        <FormLabel 
+        labelTitle="Unversity Name" 
+        inputValue="" 
+        labelFor="school" 
+        labelType="text" 
+        id="school" 
+        name="school" 
+        />
+
+        <FormLabel 
+        labelTitle="Graduation Date" 
+        inputValue="" 
+        labelFor="rraduation-date" 
+        labelType="date" 
+        id="graduation-date" 
+        name="graduation-date" 
+        />
         <!-- SelectForm Components -->
         <SelectForm
         selectId="languages"
         selectName="languages"
-        label="Select your language"
+        label="Foreign Language?"
         disabledOption="Foreign Languages"
         options={["none", "other"]}
         />
