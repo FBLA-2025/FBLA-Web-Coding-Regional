@@ -128,24 +128,33 @@ const maxYear = currentYear + 20;
       event.preventDefault(); // Prevent actual form submission for testing
       const formData = new FormData(form);
       const user = Object.fromEntries(formData.entries());
-      console.log(user);
+      // console.log(user);
       user.company = "";
       user.position = "";
       user.companySize = "";
+      user.isAdmin = "false";
+      user.isEmployer = "false";
 
-      // alert("Form submitted successfully!");
       const api = baseURL();
       const postUser = async () => {
         try {
-          const response = await api.post("/sign-up/TalentLinkDB/users");
+          const response = await api.post("/sign-up/TalentLinkDB/users", user);
+          if (response.status === 201) {
+            console.log("User created successfully!");
+            window.location.href = "/Login";
+          }
         } catch (error) {
           console.error("Error fetching jobs:", error);
+          if (error instanceof Error) {
+            if (error.message.includes("409")) {
+              alert(`User with email: ${user.email} already exists!`);
+            }
+          }
         }
       };
+      postUser();
     });
   }
-
-  // postUser();
 </script>
 
 <style>

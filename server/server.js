@@ -147,9 +147,10 @@ app.get("/log-in/:database/:collection/:email/:password", async (req, res) => {
     console.log("Model retrieved, executing find query");
 
     const user = await Model.findOne({
-      "contact_info.email": email,
+      email: email,
       password: password,
     }).lean();
+    console.log(user);
     if (user) {
       console.log(`Successfully retrieved user: ${user} with email: ${email}`);
       res.status(200).json(user._id);
@@ -169,15 +170,27 @@ app.post("/sign-up/:database/:collection", async (req, res) => {
   try {
     const { database, collection } = req.params;
     // const { username, email, password } = req.body;
-
-    console.log("POST request received for:", { database, collection, email });
+    const {
+      firstName,
+      lastName,
+      school,
+      graduationYear,
+      major,
+      company,
+      position,
+      companySize,
+      email,
+      password,
+      isEmployer,
+      isAdmin,
+    } = req.body;
 
     const Model = await getModel(database, collection);
     console.log("Model retrieved, executing save query");
 
     // Check if a user with the same email already exists
     const existingUser = await Model.findOne({
-      "contact_info.email": email,
+      email: email,
     }).lean();
     if (existingUser) {
       throw new Error(`User with email ${email} already exists`);
@@ -215,8 +228,17 @@ app.post("/sign-up/:database/:collection", async (req, res) => {
     console.log(`Successfully created user: ${newUser} with email: ${email}`);
     res.status(201).json(newUser);
   } catch (err) {
-    console.error("Error in POST route:", err);
-    res.status(500).json({ error: err.message });
+    if (err.message.includes("User with email")) {
+      console.error(
+        "User with email already exists, returning 409 status code"
+      );
+      res
+        .status(409)
+        .json({ error: "User with the same email already exists" });
+    } else {
+      console.error("Error in POST route:", err);
+      res.status(500).json({ error: err.message });
+    }
   }
 });
 

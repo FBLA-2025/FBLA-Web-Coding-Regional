@@ -45,12 +45,14 @@ import Footer from "../components/Footer.astro";
         <a href="/SignUp" class="signup-anchor">Sign up</a>
       </p>
     </div>
-
   </FormLayout>
 </form>
 <Footer />
 
 <script>
+  import axios from "axios";
+  import baseURL from "../baseURL";
+  const previousPage = localStorage.getItem("previousPage");
   const showPasswordCheckbox = document.getElementById(
     "show-password"
   ) as HTMLInputElement;
@@ -62,19 +64,108 @@ import Footer from "../components/Footer.astro";
     });
   }
 
+  // const retrieveUser = async () => {
+  //   try {
+  //     const response = await api.get(
+  //       `/retrieve-user/TalentLinkDB/users/${testId}`
+  //     );
+  //     if (response.status === 200) {
+  //       console.log(response.data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
+  // retrieveUser();
+
   const form = document.getElementById("log-in") as HTMLFormElement | null;
 
   if (form) {
     form.addEventListener("submit", (event) => {
       event.preventDefault(); // Prevent actual form submission for testing
       const formData = new FormData(form);
+      const user = Object.fromEntries(formData.entries());
 
-      // Log each form field
-      for (const [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-      }
+      const api = baseURL();
+      const loginUser = async () => {
+        try {
+          const response = await api.get(
+            `/log-in/TalentLinkDB/users/${user.email}/${user.password}`,
+            user
+          );
+          if (response.status === 200) {
+            console.log("User logged in successfully!");
+            const userId = response.data;
+            console.log(userId);
 
-      alert("Form submitted successfully!");
+            const retrieveUser = async () => {
+              try {
+                const response = await api.get(
+                  `/retrieve-user/TalentLinkDB/users/${userId}`
+                );
+                if (response.status === 200) {
+                  const user = response.data;
+                  console.log(user);
+
+                  if (user.isAdmin) {
+                    localStorage.setItem("isAdmin", "true");
+                  } else {
+                    localStorage.setItem("isAdmin", "false");
+                  }
+                  if (user.isEmployer) {
+                    localStorage.setItem("isEmployer", "true");
+                  } else {
+                    localStorage.setItem("isEmployer", "false");
+                  }
+                }
+              } catch (error) {
+                console.error("Error:", error);
+              }
+            };
+            retrieveUser();
+
+            localStorage.setItem("currentUserId", userId);
+            localStorage.setItem("loggedIn", "true");
+
+            setTimeout(() => {
+              if (previousPage) {
+                window.location.href = `/${previousPage}`;
+              } else {
+                window.location.href = "/";
+              }
+            }, 200);
+          }
+        } catch (error) {
+          console.error("Error logging in:", error);
+          if (axios.isAxiosError(error)) {
+            if (
+              error.response &&
+              error.response.data.error.includes("User with email")
+            ) {
+              alert(
+                `User with email ${user.email} not found or password is incorrect`
+              );
+            }
+          } else {
+            console.error("Unexpected error:", error);
+          }
+        }
+      };
+      loginUser();
+
+      // const retrieveUser = async () => {
+      //   try {
+      //     const response = await api.get(
+      //       `/retrieve-user/TalentLinkDB/users/${testId}`
+      //     );
+      //     if (response.status === 200) {
+      //       console.log(response.data);
+      //     }
+      //   } catch (error) {
+      //     console.error("Error:", error);
+      //   }
+      // };
+      // retrieveUser();
     });
   }
 </script>
@@ -98,7 +189,7 @@ import Footer from "../components/Footer.astro";
     font-weight: 500;
     font-size: 0.875rem;
     color: #4a4a4a;
-    margin-top: .5rem;
+    margin-top: 0.5rem;
   }
 
   .password-checkbox {
