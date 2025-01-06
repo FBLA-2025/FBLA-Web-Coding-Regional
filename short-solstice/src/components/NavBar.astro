@@ -5,7 +5,6 @@ const links = [
   // { name: "Companies", href: "/" },
   // { name: "Contact", href: "/Contact" },
   { name: "About", href: "/About", id: "about" },
-  { name: "apply", href: "/ApplyForm", id: "apply" },
   // { name: "Log In", href: "/Login", id: "login" },
 ];
 ---
@@ -66,9 +65,9 @@ const links = [
 <!-- Script for toggling mobile menu and handling NavBar changes -->
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    localStorage.setItem("isAdmin", "true");
-    localStorage.setItem("isEmployer", "true");
-    localStorage.setItem("loggedIn", "true");
+    // localStorage.setItem("isAdmin", "true");
+    // localStorage.setItem("isEmployer", "true");
+    // localStorage.setItem("loggedIn", "true");
     const navLinks = document.querySelectorAll(".nav-links");
 
     if (localStorage.getItem("isAdmin") === "true") {
@@ -134,3 +133,9 @@ const links = [
     });
   });
 </script>
+
+<!-- <style>
+  .nav-links a {
+    font-weight: 900;
+  }
+</style> -->

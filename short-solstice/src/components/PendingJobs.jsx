@@ -3,7 +3,7 @@ import "../styles/PendingJobs.css";
 
 export default function PendingJobs() {
   const [pendingJobs, setPendingJobs] = useState([]);
-  const [isEmployer, setIsEmployer] = useState(false);
+  const [isEmployer, setIsEmployer] = useState(null);
 
   useEffect(() => {
     const employerStatus = localStorage.getItem("isEmployer") === "true";

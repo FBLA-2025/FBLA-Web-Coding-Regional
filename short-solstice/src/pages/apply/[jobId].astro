@@ -1,21 +1,20 @@
 ---
-import FormLayout from '../../components/formLayout.astro'
-import FormLabel from '../../components/FormLabel.astro';
-import SelectForm from '../../components/selectForm.astro';
-import RadioForm from '../../components/RadioForm.astro';
-import TextareaForm from '../../components/TextareaForm.astro'
-import NavBar from '../../components/NavBar.astro';
+import FormLayout from "../../components/formLayout.astro";
+import FormLabel from "../../components/FormLabel.astro";
+import SelectForm from "../../components/selectForm.astro";
+import RadioForm from "../../components/RadioForm.astro";
+import TextareaForm from "../../components/TextareaForm.astro";
+import NavBar from "../../components/NavBar.astro";
+import Footer from "../../components/Footer.astro";
 import baseURL from "../../baseURL";
 import JobPageBody from "../../components/JobPageBody.jsx";
 import axios from "axios";
-import ApprovalList from '../../components/ApprovalList';
-import JobModal from '../../components/JobModal';
-
-
+import ApprovalList from "../../components/ApprovalList";
+import JobModal from "../../components/JobModal";
 
 const { job }: { job: Job } = Astro.props;
 
-console.log("Job Prop:", job);  // Debugging line to log the job object
+console.log("Job Prop:", job); // Debugging line to log the job object
 // Define the Job interface
 interface Job {
   _id: string;
@@ -24,17 +23,17 @@ interface Job {
 
 const api = baseURL();
 let jobs: Job[] = [];
-const response = await api.get('/find/TalentLinkDB/published_jobs');
+const response = await api.get("/find/TalentLinkDB/published_jobs");
 jobs = response.data; // Store the list of jobs
 
 // Extract jobName and jobId
 let jobNames = jobs.map((job: Job) => ({
   jobId: job._id,
-  jobName: job.jobName
+  jobName: job.jobName,
 }));
 
 // Get the last part of the URL
-const pathSegments = Astro.url.pathname.split('/'); 
+const pathSegments = Astro.url.pathname.split("/");
 const lastPart = pathSegments[pathSegments.length - 1]; // Get the last segment (jobId)
 console.log("Last part of the URL:", lastPart);
 
@@ -52,9 +51,8 @@ export async function getStaticPaths() {
   const api = baseURL();
   let jobs: Job[] = [];
 
-  
   try {
-    const response = await api.get('/find/TalentLinkDB/published_jobs');
+    const response = await api.get("/find/TalentLinkDB/published_jobs");
     jobs = response.data; // Store the list of jobs
   } catch (error) {
     console.error("Error fetching jobs:", error);
@@ -62,14 +60,11 @@ export async function getStaticPaths() {
 
   // Return the paths and include jobName
   return jobs.map((job: Job) => ({
-    params: { 
+    params: {
       jobId: job._id.toString(),
-      jobName: job.jobName
-      
-    }
-    
+      jobName: job.jobName,
+    },
   }));
-
 }
 ---
 
@@ -77,139 +72,131 @@ export async function getStaticPaths() {
 
 <form id="myForm" action="/submit" method="POST">
   <slot />
-  
-  <FormLayout formTitle={jobName ?? "Default Job Name"}>  <!-- Pass job.jobName as formTitle -->
 
-        <!-- FormLabel Components -->
-        <FormLabel 
-        labelTitle="Name" 
-        inputValue="" 
-        labelFor="phone" 
-        labelType="text" 
-        id="name" 
-        name="name" 
-        />
+  <FormLayout formTitle={jobName ?? "Default Job Name"}>
+    <!-- Pass job.jobName as formTitle -->
 
-        <FormLabel 
-        labelTitle="Last Name" 
-        inputValue="" 
-        labelFor="last-name" 
-        labelType="text" 
-        id="last-name" 
-        name="last-name" 
-        />
-        <FormLabel 
-        labelTitle="Phone Number" 
-        inputValue="" 
-        labelFor="phone" 
-        labelType="tel" 
-        id="phone" 
-        name="phone" 
-        />
-        <FormLabel 
-        labelTitle="Email Address" 
-        inputValue="" 
-        labelFor="email" 
-        labelType="email" 
-        id="email" 
-        name="email" 
-        />
-        <FormLabel 
-        labelTitle="Unversity Name" 
-        inputValue="" 
-        labelFor="school" 
-        labelType="text" 
-        id="school" 
-        name="school" 
-        />
+    <!-- FormLabel Components -->
+    <FormLabel
+      labelTitle="Name"
+      inputValue=""
+      labelFor="phone"
+      labelType="text"
+      id="name"
+      name="name"
+    />
 
-        <FormLabel 
-        labelTitle="Graduation Date" 
-        inputValue="" 
-        labelFor="rraduation-date" 
-        labelType="date" 
-        id="graduation-date" 
-        name="graduation-date" 
-        />
-        <!-- SelectForm Components -->
-        <SelectForm
-        selectId="languages"
-        selectName="languages"
-        label="Foreign Language?"
-        disabledOption="Foreign Languages"
-        options={["none", "other"]}
-        />
-        
-        
-        
-        <SelectForm
-        selectId="jobRole"
-        selectName="jobRole"
-        label="Select Your Role"
-        disabledOption="Choose a role"
-        options={["Developer", "Designer", "Manager"]}
-        />
-        
-        
-        
-        
-        <RadioForm 
-        groupLabel="Are you legally authorized to work in the United States?" 
-        groupName="workAuthorization" 
-        options={[
-            { label: "Yes", value: "yes" },
-            { label: "No", value: "no" }
-        ]}
-/>
+    <FormLabel
+      labelTitle="Last Name"
+      inputValue=""
+      labelFor="last-name"
+      labelType="text"
+      id="last-name"
+      name="last-name"
+    />
+    <FormLabel
+      labelTitle="Phone Number"
+      inputValue=""
+      labelFor="phone"
+      labelType="tel"
+      id="phone"
+      name="phone"
+    />
+    <FormLabel
+      labelTitle="Email Address"
+      inputValue=""
+      labelFor="email"
+      labelType="email"
+      id="email"
+      name="email"
+    />
+    <FormLabel
+      labelTitle="Unversity Name"
+      inputValue=""
+      labelFor="school"
+      labelType="text"
+      id="school"
+      name="school"
+    />
 
-<RadioForm 
-groupLabel="What is your experience level?" 
-groupName="experienceLevel" 
-options={[
-    { label: "Beginner", value: "beginner" },
-    { label: "Intermediate", value: "intermediate" },
-    { label: "Advanced", value: "advanced" }
-]}
-/>
-<TextareaForm 
-label="Tell us about yourself" 
-name="aboutMe" 
-placeholder="Write something here..." 
-id="aboutMe" 
-rows={5} 
-required={true}
-/>
+    <FormLabel
+      labelTitle="Graduation Date"
+      inputValue=""
+      labelFor="rraduation-date"
+      labelType="date"
+      id="graduation-date"
+      name="graduation-date"
+    />
+    <!-- SelectForm Components -->
+    <SelectForm
+      selectId="languages"
+      selectName="languages"
+      label="Foreign Language?"
+      disabledOption="Foreign Languages"
+      options={["None", "Other"]}
+    />
 
-<TextareaForm 
-label="Additional Comments" 
-name="comments" 
-placeholder="Any extra information?" 
-id="comments" 
-rows={3}
-/>
+    <SelectForm
+      selectId="jobRole"
+      selectName="jobRole"
+      label="Select Your Role"
+      disabledOption="Choose a role"
+      options={["Developer", "Designer", "Manager"]}
+    />
 
+    <RadioForm
+      groupLabel="Are you legally authorized to work in the United States?"
+      groupName="workAuthorization"
+      options={[
+        { label: "Yes", value: "yes" },
+        { label: "No", value: "no" },
+      ]}
+    />
 
+    <RadioForm
+      groupLabel="What is your experience level?"
+      groupName="experienceLevel"
+      options={[
+        { label: "Beginner", value: "beginner" },
+        { label: "Intermediate", value: "intermediate" },
+        { label: "Advanced", value: "advanced" },
+      ]}
+    />
+    <TextareaForm
+      label="Tell us about yourself"
+      name="aboutMe"
+      placeholder="Write something here..."
+      id="aboutMe"
+      rows={5}
+      required={true}
+    />
 
+    <TextareaForm
+      label="Additional Comments"
+      name="comments"
+      placeholder="Any extra information?"
+      id="comments"
+      rows={3}
+    />
 
-<button class="submit-button" type="submit">Submit Application</button>
-</FormLayout>
+    <button class="submit-button" type="submit">Submit Application</button>
+  </FormLayout>
 </form>
+<Footer />
 
 <script>
+  const form = document.getElementById("myForm") as HTMLFormElement | null;
 
-const form = document.getElementById('myForm') as HTMLFormElement | null;
+  if (form) {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault(); // Prevent actual form submission for testing
+      const formData = new FormData(form);
 
-if (form) {
-  form.addEventListener('submit', (event) => {
-    event.preventDefault(); // Prevent actual form submission for testing
-    const formData = new FormData(form);
+      // Log each form field
+      for (const [key, value] of formData.entries()) {
+      }
 
-    // Log each form field
-    for (const [key, value] of formData.entries()) {
- 
-    }
-
-    alert("Form submitted successfully!");
-  });
-}
+      alert("Form submitted successfully!");
+    });
+  }
 </script>

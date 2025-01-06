@@ -168,9 +168,9 @@ app.get("/log-in/:database/:collection/:email/:password", async (req, res) => {
 app.post("/sign-up/:database/:collection", async (req, res) => {
   try {
     const { database, collection } = req.params;
-    const { username, email, password } = req.body;
+    // const { username, email, password } = req.body;
 
-    // console.log("POST request received for:", { database, collection, email });
+    console.log("POST request received for:", { database, collection, email });
 
     const Model = await getModel(database, collection);
     console.log("Model retrieved, executing save query");
@@ -184,24 +184,29 @@ app.post("/sign-up/:database/:collection", async (req, res) => {
     }
 
     const newUser = new Model({
-      username: username,
-      name: {
-        first_name: null,
-        last_name: null,
-      },
-      location: {
-        country: null,
-        city: null,
-        address: null,
-        zip_code: null,
-      },
-      contact_info: {
-        email: email,
-        phone_number: null,
-      },
+      firstName: firstName,
+      lastName: lastName,
+      // location: {
+      //   country: null,
+      //   city: null,
+      //   address: null,
+      //   zip_code: null,
+      // },
+      school: school,
+      graduationYear: graduationYear,
+      major: major,
+      notifications: [],
+      appliedJobs: [],
+      company: company,
+      position: position,
+      companySize: companySize,
+      publishedJobs: [],
+      pendingJobs: [],
+      email: email,
+      // phone_number: null,
       password: password,
-      orders: [],
-      payment_type: null,
+      isEmployer: isEmployer,
+      isAdmin: isAdmin,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -255,8 +260,7 @@ app.post("/approve-pending-job/:database/:collection", async (req, res) => {
       });
     } else {
       res.status(400).json({
-        error:
-          "Request body must contain a document",
+        error: "Request body must contain a document",
       });
     }
   } catch (err) {
@@ -266,21 +270,24 @@ app.post("/approve-pending-job/:database/:collection", async (req, res) => {
 });
 
 // Delete route to remove a job from the pending jobs collection
-app.delete("/reject-pending-job/:database/:collection/:id", async (req, res) => {
-  try {
-    const { database, collection, id } = req.params;
+app.delete(
+  "/reject-pending-job/:database/:collection/:id",
+  async (req, res) => {
+    try {
+      const { database, collection, id } = req.params;
 
-    const Model = await getModel(database, collection);
-    const result = await Model.findByIdAndDelete(id);
-    if (!result) {
-      return res.status(404).send(`Document with ID ${id} not found.`);
+      const Model = await getModel(database, collection);
+      const result = await Model.findByIdAndDelete(id);
+      if (!result) {
+        return res.status(404).send(`Document with ID ${id} not found.`);
+      }
+      res.status(200).send(`Document with ID ${id} deleted successfully.`);
+    } catch (err) {
+      console.error("Error in DELETE route:", err);
+      res.status(500).json({ error: err.message });
     }
-    res.status(200).send(`Document with ID ${id} deleted successfully.`);
-  } catch (err) {
-    console.error("Error in DELETE route:", err);
-    res.status(500).json({ error: err.message });
   }
-});
+);
 
 // ******************** FOR TESTING PURPOSES ************************
 

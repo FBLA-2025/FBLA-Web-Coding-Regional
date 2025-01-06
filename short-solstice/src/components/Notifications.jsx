@@ -3,12 +3,11 @@ import "../styles/Notifications.css";
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
-  const [isEmployer, setIsEmployer] = useState(false);
+  const [isEmployer, setIsEmployer] = useState(null);
 
   useEffect(() => {
     const employerStatus = localStorage.getItem("isEmployer") === "true";
     setIsEmployer(employerStatus);
-    console.log(isEmployer);
 
     const notifs = [
       {

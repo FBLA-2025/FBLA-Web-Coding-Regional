@@ -1,5 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import NavBar from "../components/NavBar.astro";
+import Footer from "../components/Footer.astro";
 import ProfileHeader from "../components/ProfileHeader.astro";
 import AppliedJobs from "../components/AppliedJobs";
 import UserInfo from "../components/UserInfo";
@@ -74,19 +76,23 @@ import PendingJobs from "../components/PendingJobs";
     }
   }
 </style> -->
-<Layout title="Your Profile | TalentLink">
+<Layout title="Profile">
+  <NavBar />
   <main class="profile-container">
     <ProfileHeader />
     <div class="profile-content">
       <UserInfo client:load />
       <div class="jobs-section">
         <AppliedJobs client:load />
+        <!-- incorrect hook usage? -->
         <PublishedJobs client:load />
       </div>
     </div>
+    <!-- incorrect hook usage? -->
     <PendingJobs client:load />
     <Notifications client:load />
   </main>
+  <Footer />
 </Layout>
 
 <script>
