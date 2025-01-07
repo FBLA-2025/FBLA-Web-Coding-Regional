@@ -242,6 +242,103 @@ app.post("/sign-up/:database/:collection", async (req, res) => {
   }
 });
 
+// POST route to sign up a new user
+app.post("/user-apply/:database/:collection", async (req, res) => {
+  try {
+    const { database, collection } = req.params;
+    // const { username, email, password } = req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      school,
+      graduationDate,
+      languageList,
+      jobRole,
+      workAuthorization,
+      experienceLevel,
+      aboutMe,
+      comments,
+      jobId,
+      userId,
+    } = req.body;
+
+    const UserModel = await getModel(database, collection); // Assuming 'users' is the collection name for users
+    const JobModel = await getModel(database, "published_jobs"); // Assuming 'published_jobs' is the collection name for jobs
+
+    console.log("Models retrieved, executing save query");
+
+    // Find the user by userId
+    const user = await UserModel.findById(userId).lean();
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    // Check if the user has already applied to the job
+    const alreadyApplied = user.appliedJobs.some((job) => job.jobId === jobId);
+    if (alreadyApplied) {
+      return res.status(409).send("Already applied to job");
+    }
+
+    // Find the job by jobId
+    const job = await JobModel.findById(jobId).lean();
+    if (!job) {
+      return res.status(404).send("Job not found");
+    }
+
+    // Create the new applied job object
+    const appliedJob = {
+      jobId: jobId,
+      jobName: job.jobName,
+      location: job.location,
+      companyName: job.companyName,
+      companyDescription: job.companyDescription,
+      website: job.website,
+      companyEmail: job.companyEmail,
+      companyPhoneNumber: job.companyPhoneNumber,
+      jobType: job.jobType,
+      salaryRange: job.salaryRange,
+      experienceLevel: job.experienceLevel,
+      qualifications: job.qualifications,
+      skills: job.skills,
+      responsibilities: job.responsibilities,
+      postedDate: job.postedDate,
+      applicationDeadline: job.applicationDeadline,
+      employmentBenefits: job.employmentBenefits,
+      workSchedule: job.workSchedule,
+      dateApplied: new Date(),
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      phone: phone,
+      school: school,
+      graduationDate: graduationDate,
+      languageList: languageList,
+      jobRole: jobRole,
+      major: user.major,
+      workAuthorization: workAuthorization,
+      experienceLevel: experienceLevel,
+      aboutMe: aboutMe,
+      comments: comments,
+      applicationStatus: "Under Review",
+    };
+
+    // Add the new applied job to the user's appliedJobs array
+    user.appliedJobs.push(appliedJob);
+
+    // Save the updated user
+    await UserModel.findByIdAndUpdate(userId, {
+      appliedJobs: user.appliedJobs,
+    });
+
+    res.status(201).send("Job application submitted successfully");
+  } catch (error) {
+    console.error("Error applying to job:", error);
+    res.status(500).send("Internal server error");
+  }
+});
+
 // DELETE route to remove a document by ID
 app.delete("/delete/:database/:collection/:id", async (req, res) => {
   try {

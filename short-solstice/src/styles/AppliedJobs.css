@@ -79,7 +79,8 @@
   font-weight: 500;
 }
 
-.location, .date {
+.location,
+.date {
   color: #6b7280;
 }
 
@@ -95,3 +96,25 @@
   }
 }
 
+.section-title {
+  font-size: 1.125rem;
+  font-weight: medium;
+  color: #111827;
+  margin-top: 1rem;
+}
+
+.section-text {
+  color: #6b7280;
+}
+
+.important {
+  color: #dc2626;
+  font-weight: 500;
+}
+
+.list {
+  list-style: disc;
+  padding-left: 1.25rem;
+  color: #6b7280;
+  gap: 0.25rem;
+}
