@@ -52,6 +52,7 @@ import Footer from "../components/Footer.astro";
 <script>
   import axios from "axios";
   import baseURL from "../baseURL";
+  const api = baseURL();
   const previousPage = localStorage.getItem("previousPage");
   const showPasswordCheckbox = document.getElementById(
     "show-password"
@@ -64,20 +65,6 @@ import Footer from "../components/Footer.astro";
     });
   }
 
-  // const retrieveUser = async () => {
-  //   try {
-  //     const response = await api.get(
-  //       `/retrieve-user/TalentLinkDB/users/${testId}`
-  //     );
-  //     if (response.status === 200) {
-  //       console.log(response.data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
-  // retrieveUser();
-
   const form = document.getElementById("log-in") as HTMLFormElement | null;
 
   if (form) {
@@ -86,7 +73,6 @@ import Footer from "../components/Footer.astro";
       const formData = new FormData(form);
       const user = Object.fromEntries(formData.entries());
 
-      const api = baseURL();
       const loginUser = async () => {
         try {
           const response = await api.get(
@@ -97,32 +83,6 @@ import Footer from "../components/Footer.astro";
             console.log("User logged in successfully!");
             const userId = response.data;
             console.log(userId);
-
-            const retrieveUser = async () => {
-              try {
-                const response = await api.get(
-                  `/retrieve-user/TalentLinkDB/users/${userId}`
-                );
-                if (response.status === 200) {
-                  const user = response.data;
-                  console.log(user);
-
-                  if (user.isAdmin) {
-                    localStorage.setItem("isAdmin", "true");
-                  } else {
-                    localStorage.setItem("isAdmin", "false");
-                  }
-                  if (user.isEmployer) {
-                    localStorage.setItem("isEmployer", "true");
-                  } else {
-                    localStorage.setItem("isEmployer", "false");
-                  }
-                }
-              } catch (error) {
-                console.error("Error:", error);
-              }
-            };
-            retrieveUser();
 
             localStorage.setItem("currentUserId", userId);
             localStorage.setItem("loggedIn", "true");
@@ -152,20 +112,6 @@ import Footer from "../components/Footer.astro";
         }
       };
       loginUser();
-
-      // const retrieveUser = async () => {
-      //   try {
-      //     const response = await api.get(
-      //       `/retrieve-user/TalentLinkDB/users/${testId}`
-      //     );
-      //     if (response.status === 200) {
-      //       console.log(response.data);
-      //     }
-      //   } catch (error) {
-      //     console.error("Error:", error);
-      //   }
-      // };
-      // retrieveUser();
     });
   }
 </script>

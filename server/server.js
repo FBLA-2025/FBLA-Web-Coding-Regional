@@ -356,6 +356,93 @@ app.delete("/delete/:database/:collection/:id", async (req, res) => {
   }
 });
 
+// POST route to push a job to pending jobs DB as an employer
+app.post("/post-job/:database/:collection", async (req, res) => {
+  try {
+    const { database, collection } = req.params;
+    const {
+      applicationDeadline,
+      companyDescription,
+      companyEmail,
+      companyName,
+      companyPhoneNumber,
+      employerId,
+      employmentBenefits,
+      experienceLevel,
+      jobName,
+      jobType,
+      location,
+      maxSalary,
+      minSalary,
+      qualifications,
+      responsibilities,
+      skills,
+      tags,
+      website,
+      workSchedule,
+    } = req.body;
+    console.log("Req.body,", req.body);
+
+    // const Model = await getModel(database, collection);
+    const JobModel = await getModel(database, collection); // Assuming 'published_jobs' is the collection name for jobs
+    const UserModel = await getModel(database, "users"); // Assuming 'users' is the collection name for users
+
+    if (req.body) {
+      // Insert the document into the published jobs collection
+      const newJob = new JobModel({
+        applicationDeadline: applicationDeadline,
+        companyDescription: companyDescription,
+        companyEmail: companyEmail,
+        companyName: companyName,
+        companyPhoneNumber: companyPhoneNumber,
+        employerId: employerId,
+        employmentBenefits: employmentBenefits,
+        experienceLevel: experienceLevel,
+        jobName: jobName,
+        jobType: jobType,
+        location: location,
+        salaryRange: {
+          minSalary: minSalary,
+          maxSalary: maxSalary,
+        },
+        qualifications: qualifications,
+        responsibilities: responsibilities,
+        skills: skills,
+        tags: tags,
+        website: website,
+        workSchedule: workSchedule,
+        postedDate: new Date(),
+      });
+      await newJob.save();
+
+      // Find the employer in the users collection
+      const employer = await UserModel.findById(employerId);
+      if (!employer) {
+        return res.status(404).send("Employer not found");
+      }
+
+      // Add the new job to the pendingJobs array of the employer
+      employer.pendingJobs.push(newJob);
+
+      // Save the updated employer object
+      await employer.save();
+
+      console.log(
+        `Successfully created job: ${newJob} and added to employer's pending jobs`
+      );
+
+      res.status(201).json({ newJob });
+    } else {
+      res.status(400).json({
+        error: "Request body must contain a document",
+      });
+    }
+  } catch (err) {
+    console.error("Error in POST route:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // POST route to push a pending job to published jobs DB and remove it from pending jobs DB
 app.post("/approve-pending-job/:database/:collection", async (req, res) => {
   try {

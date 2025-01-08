@@ -24,7 +24,22 @@ Content-Type: application/json
 
 {
     "document": {
-        "test": "Apples and nanners"
+        "firstName": "Leo",
+        "lastName": "Marquez",
+        "school": null,
+        "graduationYear": null,
+        "major": null,
+        "notifications": [],
+        "appliedJobs": [],
+        "company": "TalentLink",
+        "position": "CTO",
+        "companySize": "501-1000 employees",
+        "publishedJobs": [],
+        "pendingJobs": [],
+        "email": "talentlinkcto@outlook.com",
+        "password": "password123",
+        "isAdmin": true,
+        "isEmployer": true
     }
 }
 

@@ -95,13 +95,6 @@ import PendingJobs from "../components/PendingJobs";
   <Footer />
 </Layout>
 
-<script>
-  const isEmployer = localStorage.getItem("isEmployer") === "true";
-  if (isEmployer) {
-    document.body.classList.add("employer-view");
-  }
-</script>
-
 <style>
   .profile-container {
     max-width: 1200px;

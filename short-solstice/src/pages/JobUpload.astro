@@ -1,8 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import TitlePage from "../components/TitlePage.astro";
-import BottomText from "../components/BottomText.astro";
-import BottomColumns from "../components/BottomColumns.astro";
 import NavBar from "../components/NavBar.astro";
 import Footer from "../components/Footer.astro";
 import FormLayout from "../components/formLayout.astro";
@@ -38,16 +35,16 @@ import SelectForm from "../components/selectForm.astro";
         labelTitle="Company Website"
         inputValue=""
         labelFor="company-website"
-        labelType="text"
+        labelType="url"
         id="company-website"
-        name="email"
+        name="website"
       />
 
       <FormLabel
         labelTitle="Company Email"
         inputValue=""
         labelFor="company-email"
-        labelType="text"
+        labelType="email"
         id="company-email"
         name="companyEmail"
       />
@@ -72,7 +69,7 @@ import SelectForm from "../components/selectForm.astro";
 
       <SelectForm
         selectId="job-type"
-        selectName="job-type"
+        selectName="jobType"
         label="Job Type"
         disabledOption="Pick a job type"
         options={[
@@ -101,6 +98,7 @@ import SelectForm from "../components/selectForm.astro";
         labelType="number"
         id="max-salary"
         name="maxSalary"
+        min={40000}
       />
 
       <FormLabel
@@ -114,7 +112,7 @@ import SelectForm from "../components/selectForm.astro";
 
       <SelectForm
         selectId="experience-level"
-        selectName="experience-level"
+        selectName="experienceLevel"
         label="Experience Level"
         disabledOption="Pick an experience level"
         options={["Entry-Level", "Mid-Level", "Senior", "Executive"]}
@@ -192,43 +190,43 @@ import SelectForm from "../components/selectForm.astro";
 <!-- Pickup from here -->
 <script>
   import baseURL from "../baseURL";
-  const form = document.getElementById("apply-form") as HTMLFormElement | null;
+  const form = document.getElementById("job-upload-form") as HTMLFormElement | null;
   const userId = localStorage.getItem("currentUserId");
 
   if (form) {
-    const jobId = form.name;
-    console.log("Job ID:", jobId);
+    // const jobId = form.name;
+    // console.log("Job ID:", jobId);
     form.addEventListener("submit", (event) => {
       event.preventDefault(); // Prevent actual form submission for testing
       const formData = new FormData(form);
-      const userApplication = Object.fromEntries(formData.entries());
-      userApplication.jobId = jobId;
+      const jobApplication = Object.fromEntries(formData.entries());
+      // userApplication.jobId = jobId;
       if (userId) {
-        userApplication.userId = userId;
+        jobApplication.employerId = userId;
       }
-      console.log("User Application:", userApplication);
+      console.log("User Application:", jobApplication);
 
       const api = baseURL();
-      const postApplication = async () => {
+      const postJob = async () => {
         try {
           const response = await api.post(
-            "/user-apply/TalentLinkDB/users",
-            userApplication
+            "/post-job/TalentLinkDB/pending_jobs",
+            jobApplication
           );
           if (response.status === 201) {
-            console.log("User created successfully!");
-            window.location.href = "/Profile";
+            console.log("Job posted successfully!");
+            // window.location.href = "/Profile";
           }
         } catch (error) {
-          console.error("Error fetching jobs:", error);
-          if (error instanceof Error) {
-            if (error.message.includes("409")) {
-              alert(`Already applied to this job!`);
-            }
-          }
+          console.error("Error posting job:", error);
+          // if (error instanceof Error) {
+          //   if (error.message.includes("409")) {
+          //     alert(`Already applied to this job!`);
+          //   }
+          // }
         }
       };
-      postApplication();
+      postJob();
     });
   }
 </script>

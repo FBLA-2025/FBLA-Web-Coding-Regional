@@ -9,8 +9,8 @@ export default function AppliedJobs() {
   const [isEmployer, setIsEmployer] = useState(false);
 
   useEffect(() => {
-    const employerStatus = localStorage.getItem("isEmployer") === "true";
-    setIsEmployer(employerStatus);
+    // const employerStatus = localStorage.getItem("isEmployer") === "true";
+    // setIsEmployer(employerStatus);
     const userId = localStorage.getItem("currentUserId");
 
     const api = baseURL();
@@ -21,6 +21,7 @@ export default function AppliedJobs() {
           `/retrieve-user/TalentLinkDB/users/${userId}`
         );
         setAppliedJobs(response.data.appliedJobs);
+        setIsEmployer(response.data.isEmployer);
         // console.log(response.data)
       } catch (error) {
         console.error("Error fetching jobs:", error);
@@ -30,35 +31,6 @@ export default function AppliedJobs() {
     fetchUser();
     console.log();
     // setAppliedJobs(jobs);
-
-    // const jobs = [
-    //   {
-    //     id: 1,
-    //     title: "Software Engineer",
-    //     company: "Innovation Solutions",
-    //     status: "Under Review",
-    //     appliedDate: "2024-01-02",
-    //     location: "Remote",
-    //     applicationDetails: {
-    //       resume: "john_doe_resume.pdf",
-    //       coverLetter: "I am excited to apply for this position...",
-    //       additionalInfo: "GitHub: github.com/johndoe",
-    //     },
-    //   },
-    //   {
-    //     id: 2,
-    //     title: "Data Analyst",
-    //     company: "DataStream Analytics",
-    //     status: "Interview Scheduled",
-    //     appliedDate: "2024-01-01",
-    //     location: "San Francisco, CA",
-    //     applicationDetails: {
-    //       resume: "john_doe_resume.pdf",
-    //       coverLetter: "I believe my skills in data analysis...",
-    //       additionalInfo: "Portfolio: johndoe.com/portfolio",
-    //     },
-    //   },
-    // ];
   }, []);
 
   if (isEmployer) {
@@ -120,7 +92,10 @@ export default function AppliedJobs() {
               <p className="section-text">
                 Role Applying For: {capitalizeFirstLetter(selectedJob.jobRole)}
               </p>
-              <p className="section-text">Authorized To Work: {capitalizeFirstLetter(selectedJob.workAuthorization)}</p>
+              <p className="section-text">
+                Authorized To Work:{" "}
+                {capitalizeFirstLetter(selectedJob.workAuthorization)}
+              </p>
               <p className="section-text">About Me: {selectedJob.aboutMe}</p>
               <p className="section-text">Comments: {selectedJob.comments}</p>
             </div>

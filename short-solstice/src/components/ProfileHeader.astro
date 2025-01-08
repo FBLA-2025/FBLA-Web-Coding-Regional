@@ -6,9 +6,7 @@
 <script>
   const logoutBtn = document.querySelector('.logout-btn') as HTMLButtonElement;
   logoutBtn.addEventListener('click', () => {
-    localStorage.removeItem('isEmployer');
-    localStorage.removeItem('isAdmin');
-    localStorage.removeItem('loggedIn');
+    localStorage.setItem('loggedIn', 'false');
     window.location.href = '/Login';
   });
 </script>

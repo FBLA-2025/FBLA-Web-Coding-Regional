@@ -1,9 +1,37 @@
-import React, { useState } from 'react';
-import ApprovalList from './ApprovalList';
-import JobInfoPanel from './JobInfoPanel';
+import React, { useState, useEffect } from "react";
+import ApprovalList from "./ApprovalList";
+import JobInfoPanel from "./JobInfoPanel";
+import baseURL from "../baseURL";
 
 const AdminPageComponent = () => {
   const [selectedJob, setSelectedJob] = useState(null);
+  const [user, setUser] = useState(null);
+  const api = baseURL();
+
+  useEffect(() => {
+    const userId = localStorage.getItem("currentUserId");
+
+    const fetchUser = async () => {
+      try {
+        const response = await api.get(
+          `/retrieve-user/TalentLinkDB/users/${userId}`
+        );
+        if (response.status === 200) {
+          setUser(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    if (user && !user.isAdmin) {
+      alert("You are not authorized to view this page.");
+      window.location.href = `/${localStorage.getItem("previousPage")}`;
+    }
+  }, [user]);
 
   const handleJobSelect = (job) => {
     setSelectedJob(job);
@@ -12,16 +40,24 @@ const AdminPageComponent = () => {
 
   return (
     <div>
-      <nav>
-        {/* Add your NavBar component here */}
-      </nav>
-      <main style={{ display: 'flex', justifyContent: 'space-around', marginTop: '5vw' }}>
-        <ApprovalList onJobSelect={handleJobSelect} />
-        <JobInfoPanel job={selectedJob} />
-      </main>
-      <footer>
-        {/* Add your Footer component here */}
-      </footer>
+      {user ? (
+        user.isAdmin ? (
+          <main
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+              marginTop: "5vw",
+            }}
+          >
+            <ApprovalList onJobSelect={handleJobSelect} />
+            <JobInfoPanel job={selectedJob} />
+          </main>
+        ) : (
+          <p>You are not authorized to view this page</p>
+        )
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 };
