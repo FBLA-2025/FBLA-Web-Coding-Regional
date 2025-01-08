@@ -5,9 +5,230 @@ import BottomText from "../components/BottomText.astro";
 import BottomColumns from "../components/BottomColumns.astro";
 import NavBar from "../components/NavBar.astro";
 import Footer from "../components/Footer.astro";
+import FormLayout from "../components/formLayout.astro";
+import FormLabel from "../components/FormLabel.astro";
+import SelectForm from "../components/selectForm.astro";
+// import RadioForm from "../components/RadioForm.astro";
+// import TextareaForm from "../components/TextareaForm.astro";
 ---
 
 <Layout title="Job Upload Page">
   <NavBar />
+  <form id="job-upload-form" action="/submit" method="POST">
+    <FormLayout formTitle="Upload a Job">
+      <FormLabel
+        labelTitle="Company Name"
+        inputValue=""
+        labelFor="company-name"
+        labelType="text"
+        id="company-name"
+        name="companyName"
+      />
+
+      <FormLabel
+        labelTitle="Company Description"
+        inputValue=""
+        labelFor="company-description"
+        labelType="text"
+        id="company-description"
+        name="companyDescription"
+      />
+
+      <FormLabel
+        labelTitle="Company Website"
+        inputValue=""
+        labelFor="company-website"
+        labelType="text"
+        id="company-website"
+        name="email"
+      />
+
+      <FormLabel
+        labelTitle="Company Email"
+        inputValue=""
+        labelFor="company-email"
+        labelType="text"
+        id="company-email"
+        name="companyEmail"
+      />
+
+      <FormLabel
+        labelTitle="Company Phone Number"
+        inputValue=""
+        labelFor="phone"
+        labelType="tel"
+        id="phone"
+        name="companyPhoneNumber"
+      />
+
+      <FormLabel
+        labelTitle="Job Name"
+        inputValue=""
+        labelFor="job-name"
+        labelType="text"
+        id="job-name"
+        name="jobName"
+      />
+
+      <SelectForm
+        selectId="job-type"
+        selectName="job-type"
+        label="Job Type"
+        disabledOption="Pick a job type"
+        options={[
+          "Full-Time",
+          "Part-Time",
+          "Contract",
+          "Freelance",
+          "Internship",
+        ]}
+      />
+
+      <FormLabel
+        labelTitle="Minimum Salary"
+        inputValue=""
+        labelFor="min-salary"
+        labelType="number"
+        id="min-salary"
+        name="minSalary"
+        min={30000}
+      />
+
+      <FormLabel
+        labelTitle="Maximum Salary"
+        inputValue=""
+        labelFor="max-salary"
+        labelType="number"
+        id="max-salary"
+        name="maxSalary"
+      />
+
+      <FormLabel
+        labelTitle="Location (State, City) or (Remote)"
+        inputValue=""
+        labelFor="location"
+        labelType="text"
+        id="location"
+        name="location"
+      />
+
+      <SelectForm
+        selectId="experience-level"
+        selectName="experience-level"
+        label="Experience Level"
+        disabledOption="Pick an experience level"
+        options={["Entry-Level", "Mid-Level", "Senior", "Executive"]}
+      />
+
+      <FormLabel
+        labelTitle="Qualifications (separate with commas)"
+        inputValue=""
+        labelFor="qualifications"
+        labelType="text"
+        id="qualifications"
+        name="qualifications"
+      />
+
+      <FormLabel
+        labelTitle="Skills (separate with commas)"
+        inputValue=""
+        labelFor="skills"
+        labelType="text"
+        id="skills"
+        name="skills"
+      />
+
+      <FormLabel
+        labelTitle="Responsibilities (separate with commas)"
+        inputValue=""
+        labelFor="responsibilities"
+        labelType="text"
+        id="responsibilities"
+        name="responsibilities"
+      />
+
+      <FormLabel
+        labelTitle="Benefits (separate with commas)"
+        inputValue=""
+        labelFor="benefits"
+        labelType="text"
+        id="benefits"
+        name="employmentBenefits"
+      />
+
+      <FormLabel
+        labelTitle="Work Schedule"
+        inputValue=""
+        labelFor="work-schedule"
+        labelType="text"
+        id="work-schedule"
+        name="workSchedule"
+      />
+
+      <FormLabel
+        labelTitle="Application Deadline"
+        inputValue=""
+        labelFor="application-deadline"
+        labelType="date"
+        id="applicaiton-deadline"
+        name="applicationDeadline"
+      />
+
+      <FormLabel
+        labelTitle="Tags (separate with commas)"
+        inputValue=""
+        labelFor="tags"
+        labelType="text"
+        id="tags"
+        name="tags"
+      />
+
+      <button class="submit-button" type="submit">Submit Job</button>
+    </FormLayout>
+  </form>
   <Footer />
 </Layout>
+
+<!-- Pickup from here -->
+<script>
+  import baseURL from "../baseURL";
+  const form = document.getElementById("apply-form") as HTMLFormElement | null;
+  const userId = localStorage.getItem("currentUserId");
+
+  if (form) {
+    const jobId = form.name;
+    console.log("Job ID:", jobId);
+    form.addEventListener("submit", (event) => {
+      event.preventDefault(); // Prevent actual form submission for testing
+      const formData = new FormData(form);
+      const userApplication = Object.fromEntries(formData.entries());
+      userApplication.jobId = jobId;
+      if (userId) {
+        userApplication.userId = userId;
+      }
+      console.log("User Application:", userApplication);
+
+      const api = baseURL();
+      const postApplication = async () => {
+        try {
+          const response = await api.post(
+            "/user-apply/TalentLinkDB/users",
+            userApplication
+          );
+          if (response.status === 201) {
+            console.log("User created successfully!");
+            window.location.href = "/Profile";
+          }
+        } catch (error) {
+          console.error("Error fetching jobs:", error);
+          if (error instanceof Error) {
+            if (error.message.includes("409")) {
+              alert(`Already applied to this job!`);
+            }
+          }
+        }
+      };
+      postApplication();
+    });
+  }
+</script>
