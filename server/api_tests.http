@@ -73,7 +73,8 @@ Content-Type: application/json
     "applicationDeadline": "01-10-2025",
     "employmentBenefits": ["Work-from-home option", "Flexible hours"],
     "workSchedule": "Evenings, 5 PM to 10 PM",
-    "tags": ["contract", "customer service", "remote", "support"]
+    "tags": ["contract", "customer service", "remote", "support"],
+    "employerId": "677e0d9fd6265e9088089525"
   },
   {
     "jobName": "Data Analyst",
@@ -100,7 +101,8 @@ Content-Type: application/json
     "applicationDeadline": "01-20-2025",
     "employmentBenefits": ["Health insurance", "401(k)", "Onsite gym"],
     "workSchedule": "Monday-Friday, 9 AM to 5 PM",
-    "tags": ["data", "finance", "analytics", "technology"]
+    "tags": ["data", "finance", "analytics", "technology"],
+    "employerId": "677e0d9fd6265e9088089525"
   }
     ]
 }

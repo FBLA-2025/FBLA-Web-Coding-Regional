@@ -48,7 +48,9 @@ const JobInfoPanel = ({ job }) => {
             job
           );
           console.log("Job approved:", response.data);
-          setModalMessage(`Successfully approved job opening for ${job.jobName} requested by ${job.companyName}`);
+          setModalMessage(
+            `Successfully approved job opening for ${job.jobName} requested by ${job.companyName}`
+          );
           setModalButton("Done");
           setIsModalClosable(false);
           setShowApproveModal(true);
@@ -67,12 +69,15 @@ const JobInfoPanel = ({ job }) => {
   useEffect(() => {
     if (rejectTriggered) {
       const rejectJob = async () => {
+        console.log(job.employerId);
         try {
           const response = await api.delete(
-            `/reject-pending-job/TalentLinkDB/pending_jobs/${job._id}`
+            `/reject-pending-job/TalentLinkDB/pending_jobs/${job._id}/${job.employerId}`
           );
           console.log("Job rejected:", response.data);
-          setModalMessage(`Successfully rejected job opening for ${job.jobName} requested by ${job.companyName}`);
+          setModalMessage(
+            `Successfully rejected job opening for ${job.jobName} requested by ${job.companyName}`
+          );
           setModalButton("Done");
           setIsModalClosable(false);
           setShowRejectModal(true);
@@ -175,7 +180,9 @@ const JobInfoPanel = ({ job }) => {
             </div>
             <div className="job-info-section">
               <h3>Posted on {formatDate(job.postedDate)}</h3>
-              <h3>Deadline to apply is {formatDate(job.applicationDeadline)}</h3>
+              <h3>
+                Deadline to apply is {formatDate(job.applicationDeadline)}
+              </h3>
             </div>
             <div className="job-info-section"></div>
             <div id="button-wrapper">
@@ -193,9 +200,23 @@ const JobInfoPanel = ({ job }) => {
       </div>
       <ConfirmAdminModal
         show={showApproveModal || showRejectModal}
-        onClose={() => isModalClosable && (setShowApproveModal(false) || setShowRejectModal(false))}
-        onConfirm={modalButton === "Done" ? handleDone : (showApproveModal ? confirmApprove : confirmReject)}
-        message={modalMessage || (showApproveModal ? "Are you sure you want to approve this job?" : "Are you sure you want to reject this job?")}
+        onClose={() =>
+          isModalClosable &&
+          (setShowApproveModal(false) || setShowRejectModal(false))
+        }
+        onConfirm={
+          modalButton === "Done"
+            ? handleDone
+            : showApproveModal
+            ? confirmApprove
+            : confirmReject
+        }
+        message={
+          modalMessage ||
+          (showApproveModal
+            ? "Are you sure you want to approve this job?"
+            : "Are you sure you want to reject this job?")
+        }
         buttonLabel={modalButton}
       />
     </div>

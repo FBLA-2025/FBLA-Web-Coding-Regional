@@ -396,7 +396,10 @@ app.post("/post-job/:database/:collection", async (req, res) => {
         companyName: companyName,
         companyPhoneNumber: companyPhoneNumber,
         employerId: employerId,
-        employmentBenefits: employmentBenefits.split(",").map(item => item.trim()).filter(item => item),
+        employmentBenefits: employmentBenefits
+          .split(",")
+          .map((item) => item.trim())
+          .filter((item) => item),
         experienceLevel: experienceLevel,
         jobName: jobName,
         jobType: jobType,
@@ -405,9 +408,18 @@ app.post("/post-job/:database/:collection", async (req, res) => {
           minSalary: minSalary,
           maxSalary: maxSalary,
         },
-        qualifications: qualifications.split(",").map(item => item.trim()).filter(item => item),
-        responsibilities: responsibilities.split(",").map(item => item.trim()).filter(item => item),
-        skills: skills.split(",").map(item => item.trim()).filter(item => item),
+        qualifications: qualifications
+          .split(",")
+          .map((item) => item.trim())
+          .filter((item) => item),
+        responsibilities: responsibilities
+          .split(",")
+          .map((item) => item.trim())
+          .filter((item) => item),
+        skills: skills
+          .split(",")
+          .map((item) => item.trim())
+          .filter((item) => item),
         tags: tags,
         website: website,
         workSchedule: workSchedule,
@@ -447,11 +459,10 @@ app.post("/post-job/:database/:collection", async (req, res) => {
 app.post("/approve-pending-job/:database/:collection", async (req, res) => {
   try {
     const { database, collection } = req.params;
-    // const { pendingJob } = req.body;
-    // console.log("Req.body,", req.body);
-    // console.log("Pending job, ", pendingJob)
+
     const Model = await getModel(database, collection);
     const publishedModel = await getModel(database, "published_jobs");
+    const UserModel = await getModel(database, "users"); // Assuming 'users' is the collection name for users
 
     if (req.body) {
       // Insert the document into the published jobs collection
@@ -459,6 +470,23 @@ app.post("/approve-pending-job/:database/:collection", async (req, res) => {
 
       // Remove the document from the pending jobs collection
       await Model.deleteOne({ _id: req.body._id });
+
+      // Find the employer in the users collection
+      const employer = await UserModel.findById(req.body.employerId);
+      if (!employer) {
+        return res.status(404).send("Employer not found");
+      }
+
+      // Add the new job to the publishedJobs array of the employer
+      employer.publishedJobs.push(newJob);
+
+      // Remove the job from the employer's pendingJobs array
+      employer.pendingJobs = employer.pendingJobs.filter(
+        (job) => job._id.toString() !== req.body._id
+      );
+
+      // Save the updated employer object
+      await employer.save();
 
       res.status(201).json({
         message: "Document inserted and removed from pending jobs successfully",
@@ -477,12 +505,27 @@ app.post("/approve-pending-job/:database/:collection", async (req, res) => {
 
 // Delete route to remove a job from the pending jobs collection
 app.delete(
-  "/reject-pending-job/:database/:collection/:id",
+  "/reject-pending-job/:database/:collection/:id/:employerId",
   async (req, res) => {
     try {
-      const { database, collection, id } = req.params;
+      const { database, collection, id, employerId } = req.params;
 
       const Model = await getModel(database, collection);
+      const UserModel = await getModel(database, "users");
+
+      // Find the employer in the users collection
+      const employer = await UserModel.findById(employerId);
+      if (!employer) {
+        return res.status(404).send("Employer not found");
+      }
+
+      // Remove the job from the employer's pendingJobs array
+      employer.pendingJobs = employer.pendingJobs.filter(
+        (job) => job._id.toString() !== id
+      );
+      
+      await employer.save();
+
       const result = await Model.findByIdAndDelete(id);
       if (!result) {
         return res.status(404).send(`Document with ID ${id} not found.`);

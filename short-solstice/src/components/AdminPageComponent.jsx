@@ -43,13 +43,7 @@ const AdminPageComponent = () => {
     <div>
       {user ? (
         user.isAdmin ? (
-          <main
-            // style={{
-            //   display: "flex",
-            //   justifyContent: "space-around",
-            //   marginTop: "5vw",
-            // }}
-          >
+          <main>
             <ApprovalList onJobSelect={handleJobSelect} />
             <JobInfoPanel job={selectedJob} />
           </main>

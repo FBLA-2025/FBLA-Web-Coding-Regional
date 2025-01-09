@@ -45,3 +45,10 @@
   font-size: 1.2vw;
   padding: 1vw;
 }
+
+@media (max-width: 600px) {
+  #approval-list {
+    width: 90%;
+    margin-left: 0;
+  }
+}

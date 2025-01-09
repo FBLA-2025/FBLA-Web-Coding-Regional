@@ -32,32 +32,27 @@ const ApprovalList = ({ onJobSelect }) => {
     fetchJobs();
   }, []);
 
-
   return (
     <div id="approval-list">
       <div id="header">
         <h2>Pending For Approval</h2>
       </div>
       <div id="jobs-list">
-        { jobs.length !== 0 ? (
-        jobs.map((job) => (
-          <div
-            className="job-list-item"
-            onClick={() => {
-              onJobSelect(job);
-            }}
-            key={job.id}
-          >
-            {/* <h3> */}
-              {/* <span>{job.jobName}</span> */}
-            {/* </h3> */}
-            <i class="fa-solid fa-circle-chevron-right"></i> {job.jobName}
-          </div>
-        ))
-      ) : (
-        <p id="no-pending-jobs">No pending jobs</p>
-      )
-      }
+        {jobs.length !== 0 ? (
+          jobs.map((job) => (
+            <div
+              className="job-list-item"
+              onClick={() => {
+                onJobSelect(job);
+              }}
+              key={job.id}
+            >
+              <i class="fa-solid fa-circle-chevron-right"></i> {job.jobName}
+            </div>
+          ))
+        ) : (
+          <p id="no-pending-jobs">No pending jobs</p>
+        )}
       </div>
     </div>
   );

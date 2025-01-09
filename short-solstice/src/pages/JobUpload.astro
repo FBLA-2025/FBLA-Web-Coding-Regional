@@ -102,7 +102,7 @@ import SelectForm from "../components/selectForm.astro";
       />
 
       <FormLabel
-        labelTitle="Location (State, City) or (Remote)"
+        labelTitle="Location (City, State) or (Remote)"
         inputValue=""
         labelFor="location"
         labelType="text"
@@ -190,7 +190,9 @@ import SelectForm from "../components/selectForm.astro";
 <!-- Pickup from here -->
 <script>
   import baseURL from "../baseURL";
-  const form = document.getElementById("job-upload-form") as HTMLFormElement | null;
+  const form = document.getElementById(
+    "job-upload-form"
+  ) as HTMLFormElement | null;
   const userId = localStorage.getItem("currentUserId");
 
   if (form) {
@@ -215,16 +217,11 @@ import SelectForm from "../components/selectForm.astro";
           );
           if (response.status === 201) {
             console.log("Job posted successfully!");
-            console.log(response.data)
-            // window.location.href = "/Profile";
+            console.log(response.data);
+            window.location.href = "/Profile";
           }
         } catch (error) {
           console.error("Error posting job:", error);
-          // if (error instanceof Error) {
-          //   if (error.message.includes("409")) {
-          //     alert(`Already applied to this job!`);
-          //   }
-          // }
         }
       };
       postJob();
