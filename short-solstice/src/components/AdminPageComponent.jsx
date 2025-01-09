@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ApprovalList from "./ApprovalList";
 import JobInfoPanel from "./JobInfoPanel";
 import baseURL from "../baseURL";
+import '../styles/AdminPageComponent.css'
 
 const AdminPageComponent = () => {
   const [selectedJob, setSelectedJob] = useState(null);
@@ -43,11 +44,11 @@ const AdminPageComponent = () => {
       {user ? (
         user.isAdmin ? (
           <main
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-              marginTop: "5vw",
-            }}
+            // style={{
+            //   display: "flex",
+            //   justifyContent: "space-around",
+            //   marginTop: "5vw",
+            // }}
           >
             <ApprovalList onJobSelect={handleJobSelect} />
             <JobInfoPanel job={selectedJob} />

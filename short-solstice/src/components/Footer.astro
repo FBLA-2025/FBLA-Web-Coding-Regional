@@ -1,21 +1,9 @@
 ---
-let isEmployer = true;
-let isAdmin = true;
-
 const links = [
   { name: "Home", href: "/" },
-  { name: "Jobs", href: "/" },
-  { name: "Companies", href: "/" },
-  { name: "Contact", href: "/contact" },
-  { name: "Log In", href: "/login" },
+  { name: "Jobs", href: "/JobsPage" },
+  { name: "About", href: "/About" },
 ];
-
-if (isEmployer) {
-  links.push({ name: "Post a Job", href: "/jobUpload" });
-}
-if (isAdmin) {
-  links.push({ name: "Admin Hub", href: "/AdminPage" });
-}
 ---
 
 <footer class="footer">
@@ -55,6 +43,96 @@ if (isAdmin) {
     </div>
   </div>
 </footer>
+
+<script>
+  import baseURL from "../baseURL";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const api = baseURL();
+    let user;
+
+    const userId = localStorage.getItem("currentUserId");
+
+    const fetchUser = async () => {
+      try {
+        const response = await api.get(
+          `/retrieve-user/TalentLinkDB/users/${userId}`
+        );
+        if (response.status === 200) {
+          user = response.data;
+          console.log(localStorage.getItem("loggedIn"));
+          // console.log("User fetched from nav:", user);
+
+          const navLinks = document.querySelector(".nav");
+
+          if (user.isAdmin && navLinks) {
+            const adminLink = document.createElement("a");
+            adminLink.href = "/AdminPage";
+            adminLink.className = "link";
+            adminLink.textContent = "Admin Hub";
+            navLinks.appendChild(adminLink);
+          }
+
+          if (user.isEmployer && navLinks) {
+            const postJobLink = document.createElement("a");
+            postJobLink.href = "/JobUpload";
+            postJobLink.className = "link";
+            postJobLink.textContent = "Post a Job";
+            navLinks.appendChild(postJobLink);
+          }
+
+          if (navLinks) {
+            const loginLink = document.createElement("a");
+            loginLink.href = "/Login";
+            loginLink.className = "link login";
+            loginLink.textContent = "Log In";
+            navLinks.appendChild(loginLink);
+          }
+
+          if (localStorage.getItem("loggedIn") === "true") {
+            const loginLink = document.querySelector(".login");
+            if (loginLink) {
+              const anchor = loginLink as HTMLAnchorElement;
+              anchor.href = "/Profile";
+              anchor.textContent = "Profile";
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      }
+    };
+    if (userId !== null) {
+      fetchUser();
+    } else {
+      const navLinks = document.querySelectorAll(".nav-links");
+      const loginLink = document.createElement("a");
+      loginLink.href = "/Login";
+      loginLink.className =
+        "text-gray-800 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium login";
+      loginLink.textContent = "Log In";
+      const loginLinkMobile = document.createElement("a");
+      loginLinkMobile.href = "/Login";
+      loginLinkMobile.className =
+        "block text-gray-800 hover:text-blue-500 px-3 py-2 rounded-md text-base font-medium login";
+      loginLinkMobile.textContent = "Log In";
+      navLinks[0].appendChild(loginLink);
+      navLinks[1].appendChild(loginLinkMobile);
+
+      if (localStorage.getItem("loggedIn") === "true") {
+        // const loginLink = document.querySelectorAll(".login") as HTMLAnchorElement;
+        const loginLinks = document.querySelectorAll(".login");
+        if (loginLinks) {
+          loginLinks.forEach((loginLink) => {
+            const anchor = loginLink as HTMLAnchorElement;
+            anchor.href = "/Profile";
+            anchor.textContent = "Profile";
+          });
+        }
+      }
+    }
+  });
+</script>
 
 <style>
   .footer {
@@ -146,7 +224,3 @@ if (isAdmin) {
     color: #a0aec0;
   }
 </style>
-
-<script>
-  // add logic for admin/employer
-</script>

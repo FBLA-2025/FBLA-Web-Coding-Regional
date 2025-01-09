@@ -88,6 +88,11 @@ const JobInfoPanel = ({ job }) => {
     }
   }, [rejectTriggered, api, job]);
 
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   return (
     <div id="job-info-panel">
       <div id="header">
@@ -169,8 +174,8 @@ const JobInfoPanel = ({ job }) => {
               </ul>
             </div>
             <div className="job-info-section">
-              <h3>Posted on {job.postedDate}</h3>
-              <h3>Deadline to apply is {job.applicationDeadline}</h3>
+              <h3>Posted on {formatDate(job.postedDate)}</h3>
+              <h3>Deadline to apply is {formatDate(job.applicationDeadline)}</h3>
             </div>
             <div className="job-info-section"></div>
             <div id="button-wrapper">

@@ -46,7 +46,7 @@ export default function PendingJobs() {
   }, []);
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
@@ -61,19 +61,25 @@ export default function PendingJobs() {
           <div className="pending-jobs">
             <h2>Pending Jobs</h2>
             <div className="jobs-list">
-              {pendingJobs.map((job) => (
-                <div key={job._id} className="job-card">
-                  <div className="job-header">
-                    <h3>{job.jobName}</h3>
-                    <span className="status">Pending Approval</span>
+              {pendingJobs.length > 0 ? (
+                pendingJobs.map((job) => (
+                  <div key={job._id} className="job-card">
+                    <div className="job-header">
+                      <h3>{job.jobName}</h3>
+                      <span className="status">Pending Approval</span>
+                    </div>
+                    <div className="job-details">
+                      <p className="company">{job.companyName}</p>
+                      <p className="location">{job.location}</p>
+                      <p className="date">
+                        Submitted: {formatDate(job.postedDate)}
+                      </p>
+                    </div>
                   </div>
-                  <div className="job-details">
-                    <p className="company">{job.companyName}</p>
-                    <p className="location">{job.location}</p>
-                    <p className="date">Submitted: {formatDate(job.postedDate)}</p>
-                  </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p>You Have No Pending Jobs</p>
+              )}
             </div>
           </div>
         ) : (

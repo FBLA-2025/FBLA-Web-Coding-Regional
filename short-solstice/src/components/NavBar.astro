@@ -2,10 +2,7 @@
 const links = [
   { name: "Home", href: "/", id: "home" },
   { name: "Jobs", href: "/JobsPage", id: "jobs" },
-  // { name: "Companies", href: "/" },
-  // { name: "Contact", href: "/Contact" },
   { name: "About", href: "/About", id: "about" },
-  // { name: "Log In", href: "/Login", id: "login" },
 ];
 ---
 
@@ -78,6 +75,7 @@ const links = [
         );
         if (response.status === 200) {
           user = response.data;
+          console.log(localStorage.getItem("loggedIn"));
           // console.log("User fetched from nav:", user);
 
           const navLinks = document.querySelectorAll(".nav-links");
@@ -149,7 +147,41 @@ const links = [
         console.error("Error fetching jobs:", error);
       }
     };
-    fetchUser();
+    if (userId !== null) {
+      fetchUser();
+    } else {
+      const navLinks = document.querySelectorAll(".nav-links");
+      const loginLink = document.createElement("a");
+      loginLink.href = "/Login";
+      loginLink.className =
+        "text-gray-800 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium login";
+      loginLink.textContent = "Log In";
+      const loginLinkMobile = document.createElement("a");
+      loginLinkMobile.href = "/Login";
+      loginLinkMobile.className =
+        "block text-gray-800 hover:text-blue-500 px-3 py-2 rounded-md text-base font-medium login";
+      loginLinkMobile.textContent = "Log In";
+      navLinks[0].appendChild(loginLink);
+      navLinks[1].appendChild(loginLinkMobile);
 
+      if (localStorage.getItem("loggedIn") === "true") {
+        // const loginLink = document.querySelectorAll(".login") as HTMLAnchorElement;
+        const loginLinks = document.querySelectorAll(".login");
+        if (loginLinks) {
+          loginLinks.forEach((loginLink) => {
+            const anchor = loginLink as HTMLAnchorElement;
+            anchor.href = "/Profile";
+            anchor.textContent = "Profile";
+          });
+        }
+      }
+      const mobileMenuButton = document.getElementById("mobile-menu-button");
+      const mobileMenu = document.getElementById("mobile-menu");
+
+      mobileMenuButton?.addEventListener("click", () => {
+        mobileMenu?.classList.toggle("hidden");
+        console.log("clicked");
+      });
+    }
   });
 </script>

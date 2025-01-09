@@ -45,7 +45,7 @@ export default function UserInfo() {
           <p>{user.email}</p>
         </div>
         {user ? (
-          isEmployer === "true" ? (
+          isEmployer ? (
             <>
               <div className="info-item">
                 <label>Company</label>

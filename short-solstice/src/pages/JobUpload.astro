@@ -215,6 +215,7 @@ import SelectForm from "../components/selectForm.astro";
           );
           if (response.status === 201) {
             console.log("Job posted successfully!");
+            console.log(response.data)
             // window.location.href = "/Profile";
           }
         } catch (error) {

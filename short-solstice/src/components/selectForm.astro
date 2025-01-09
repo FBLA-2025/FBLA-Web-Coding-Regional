@@ -16,7 +16,8 @@ const { selectId, selectName, label, disabledOption, options } = Astro.props;
     <option value="" disabled selected>{disabledOption}</option>
     {
       options.map((option) => (
-        <option value={option.toLowerCase()}>{option}</option>
+        // <option value={option.toLowerCase()}>{option}</option>
+        <option value={option}>{option}</option>
       ))
     }
   </select>
