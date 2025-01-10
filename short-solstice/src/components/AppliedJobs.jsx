@@ -29,8 +29,6 @@ export default function AppliedJobs() {
     };
 
     fetchUser();
-    console.log();
-    // setAppliedJobs(jobs);
   }, []);
 
   if (isEmployer) {

@@ -111,14 +111,6 @@ app.get("/retrieve-user/:database/:collection/:userId", async (req, res) => {
     console.log("Model retrieved, executing find query");
 
     let user = await Model.findOne({ _id: userId }).lean();
-    if (!user) {
-      console.log(
-        `User not found in ${collection}, searching in the other collection`
-      );
-      const otherCollection = collection === "users" ? "employee" : "users";
-      const OtherModel = await getModel(database, otherCollection);
-      user = await OtherModel.findOne({ _id: userId }).lean();
-    }
 
     if (user) {
       console.log(`Successfully retrieved user: ${user} with ID: ${userId}`);
@@ -343,13 +335,13 @@ app.post("/user-apply/:database/:collection", async (req, res) => {
       return res.status(404).send("Employer's job not found");
     }
 
-   employer.publishedJobs[employerJobIndex].applicants.push(appliedJob);
+    employer.publishedJobs[employerJobIndex].applicants.push(appliedJob);
 
     // Save the updated user
     // await UserModel.findByIdAndUpdate(userId, {
     //   appliedJobs: user.appliedJobs,
     // });
-    
+
     // Save the updates to the user and employer
     await Promise.all([
       UserModel.findByIdAndUpdate(userId, { appliedJobs: user.appliedJobs }),
@@ -560,6 +552,99 @@ app.delete(
       res.status(200).send(`Document with ID ${id} deleted successfully.`);
     } catch (err) {
       console.error("Error in DELETE route:", err);
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+// POST Endpoint to update the status of an applicant's application
+app.post(
+  "/update-application-status/:database/:collection",
+  async (req, res) => {
+    try {
+      const { database, collection } = req.params;
+      const { userId, jobId, newStatus } = req.body;
+
+      const UserModel = await getModel(database, "users"); // Assuming 'users' is the collection name for users
+      const JobModel = await getModel(database, collection);
+
+      // Find the user by userId
+      const user = await UserModel.findById(userId);
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+
+      // Find the job by jobId
+      const job = await JobModel.findById(jobId);
+      if (!job) {
+        return res.status(404).send("Job not found");
+      }
+
+      // Update the application status in the user's appliedJobs array
+      const application = user.appliedJobs.find(
+        (app) => app.jobId.toString() === jobId
+      );
+      if (!application) {
+        return res.status(404).send("Application not found");
+      }
+      application.applicationStatus = newStatus;
+
+      // Create a new notification object
+      const newNotification = {
+        id: new mongoose.Types.ObjectId(),
+        type: newStatus,
+        jobTitle: job.jobName,
+        company: job.companyName,
+        date: new Date(),
+      };
+
+      // Push the new notification object into the user's notifications array
+      user.notifications.push(newNotification);
+
+      // Save the updated user object
+      await user.save();
+
+      // Find the employer by employerId
+      const employer = await UserModel.findById(job.employerId);
+      if (!employer) {
+        return res.status(404).send("Employer not found");
+      }
+
+      // Update the application status in the employer's publishedJobs array
+      const employerJobIndex = employer.publishedJobs.findIndex(
+        (job) => job._id.toString() === jobId
+      );
+      if (employerJobIndex === -1) {
+        return res.status(404).send("Employer's job not found");
+      }
+
+      // Update the application status in the applicants array of the specific job
+      const applicantIndex = employer.publishedJobs[
+        employerJobIndex
+      ].applicants.findIndex(
+        (applicant) => applicant.userId.toString() === userId
+      );
+      if (applicantIndex === -1) {
+        return res.status(404).send("Applicant not found");
+      }
+      employer.publishedJobs[employerJobIndex].applicants[
+        applicantIndex
+      ].applicationStatus = newStatus;
+
+      // Mark the nested array as modified
+      employer.markModified(
+        `publishedJobs.${employerJobIndex}.applicants.${applicantIndex}`
+      );
+
+      // Save the updated employer object
+      await employer.save();
+
+      console.log(
+        `Updated application status for user ${userId} in job ${jobId} to ${newStatus}`
+      );
+      res.status(201).json(employer);
+    } catch (err) {
+      console.error("Error in POST route:", err);
       res.status(500).json({ error: err.message });
     }
   }

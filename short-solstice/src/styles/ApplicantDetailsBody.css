@@ -1,13 +1,19 @@
-.applicant-details h2 {
+.applicant-name {
   color: #0971e9;
   font-size: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: .5rem;
 }
 
 .applicant-details h3 {
   color: #111827;
   font-size: 1.25rem;
   margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.section-header {
+  font-size: 1.7rem;
+  font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
