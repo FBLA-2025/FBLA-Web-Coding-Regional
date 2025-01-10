@@ -94,6 +94,10 @@ const jobSchema = new mongoose.Schema({
     employerId: {
         type: String,
         required: true
+    },
+    applicants: {
+        type: Array,
+        required: true,
     }
 });
 

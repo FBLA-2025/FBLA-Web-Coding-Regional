@@ -70,18 +70,22 @@ export default function JobCarousel() {
         </div>
 
         <div className={`job-grid ${direction}`}>
-          {visibleJobs.map((job) => (
-            <div key={job.id} className="job-card">
-              <h3 className="job-title">{job.jobName}</h3>
-              <p className="job-company">{job.companyName}</p>
-              <p className="job-details">
-                {job.location} • {job.jobType}
-              </p>
-              <button variant="outline" className="details-button">
-                View Details
-              </button>
-            </div>
-          ))}
+          {visibleJobs.length > 0 ? (
+            visibleJobs.map((job) => (
+              <div key={job.id} className="job-card">
+                <h3 className="job-title">{job.jobName}</h3>
+                <p className="job-company">{job.companyName}</p>
+                <p className="job-details">
+                  {job.location} • {job.jobType}
+                </p>
+                <button variant="outline" className="details-button">
+                  View Details
+                </button>
+              </div>
+            ))
+          ) : (
+            <p>No Available Jobs</p>
+          )}
         </div>
       </div>
     </section>

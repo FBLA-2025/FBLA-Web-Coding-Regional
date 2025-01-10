@@ -287,6 +287,12 @@ app.post("/user-apply/:database/:collection", async (req, res) => {
       return res.status(404).send("Job not found");
     }
 
+    const employerId = job.employerId;
+    const employer = await UserModel.findById(employerId).lean();
+    if (!employer) {
+      return res.status(404).send("Employer not found");
+    }
+
     // Create the new applied job object
     const appliedJob = {
       jobId: jobId,
@@ -308,6 +314,7 @@ app.post("/user-apply/:database/:collection", async (req, res) => {
       employmentBenefits: job.employmentBenefits,
       workSchedule: job.workSchedule,
       dateApplied: new Date(),
+      userId: userId,
       firstName: firstName,
       lastName: lastName,
       email: email,
@@ -327,10 +334,29 @@ app.post("/user-apply/:database/:collection", async (req, res) => {
     // Add the new applied job to the user's appliedJobs array
     user.appliedJobs.push(appliedJob);
 
+    // Find and update the specific job in the employer's publishedJobs array
+    const employerJobIndex = employer.publishedJobs.findIndex(
+      (job) => job._id.toString() === jobId
+    );
+
+    if (employerJobIndex === -1) {
+      return res.status(404).send("Employer's job not found");
+    }
+
+   employer.publishedJobs[employerJobIndex].applicants.push(appliedJob);
+
     // Save the updated user
-    await UserModel.findByIdAndUpdate(userId, {
-      appliedJobs: user.appliedJobs,
-    });
+    // await UserModel.findByIdAndUpdate(userId, {
+    //   appliedJobs: user.appliedJobs,
+    // });
+    
+    // Save the updates to the user and employer
+    await Promise.all([
+      UserModel.findByIdAndUpdate(userId, { appliedJobs: user.appliedJobs }),
+      UserModel.findByIdAndUpdate(employerId, {
+        publishedJobs: employer.publishedJobs,
+      }),
+    ]);
 
     res.status(201).send("Job application submitted successfully");
   } catch (error) {
@@ -423,6 +449,7 @@ app.post("/post-job/:database/:collection", async (req, res) => {
         tags: tags,
         website: website,
         workSchedule: workSchedule,
+        applicants: [],
         postedDate: new Date(),
       });
       await newJob.save();
@@ -523,7 +550,7 @@ app.delete(
       employer.pendingJobs = employer.pendingJobs.filter(
         (job) => job._id.toString() !== id
       );
-      
+
       await employer.save();
 
       const result = await Model.findByIdAndDelete(id);
