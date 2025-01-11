@@ -1,4 +1,5 @@
 ---
+import logo from "../../public/assets/talentlinklogo.svg";
 interface Props {
   title: string;
   description?: string;
@@ -22,6 +23,7 @@ const {
     <meta name="generator" content={Astro.generator} />
     <meta property="og:image" content={image} />
     <title>{title}</title>
+    <link rel="icon" href={logo.src} />
   </head>
   <body class="min-h-screen">
     <slot />

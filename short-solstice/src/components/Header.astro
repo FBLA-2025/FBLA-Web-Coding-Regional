@@ -8,8 +8,11 @@
           specifically for our students. Your next career step starts here.
         </p>
         <div class="actions">
-          <button class="primary button">Browse Jobs</button>
-          <button class="secondary button">Post a Job</button>
+          <button class="primary button"
+            ><a href="/JobsPage">Browse Jobs</a></button
+          >
+          <button class="secondary button"><a class="post-job-link"></a></button
+          >
         </div>
       </div>
       <div class="image">
@@ -120,6 +123,7 @@
     background-color: rgba(0, 81, 173, 0.9);
   }
   .secondary {
+    color: rgb(61, 61, 61);
     background-color: #ffffff;
     outline: 2px solid #c5c5c586;
   }
@@ -157,16 +161,56 @@
 </style>
 
 <script>
-  let currentIndex = 0;
-  const images = document.querySelectorAll(".image-content");
-  const totalImages = images.length;
+  import baseURL from "../baseURL";
+  document.addEventListener("DOMContentLoaded", () => {
+    const api = baseURL();
+    let user;
+    const userId = localStorage.getItem("currentUserId");
+    console.log("User ID:", userId);
+    let currentIndex = 0;
+    const images = document.querySelectorAll(".image-content");
+    const totalImages = images.length;
 
-  function showNextImage() {
-    images[currentIndex].classList.remove("active");
-    currentIndex = (currentIndex + 1) % totalImages;
-    images[currentIndex].classList.add("active");
-  }
+    function showNextImage() {
+      images[currentIndex].classList.remove("active");
+      currentIndex = (currentIndex + 1) % totalImages;
+      images[currentIndex].classList.add("active");
+    }
 
-  // Change image every 6 seconds
-  setInterval(showNextImage, 6000);
+    // Change image every 6 seconds
+    setInterval(showNextImage, 6000);
+
+    const fetchUser = async () => {
+      try {
+        const response = await api.get(
+          `/retrieve-user/TalentLinkDB/users/${userId}`
+        );
+        if (response.status === 200) {
+          user = response.data;
+          const postJobLink = document.querySelector(
+            ".post-job-link"
+          ) as HTMLAnchorElement;
+          if (user.isEmployer) {
+            postJobLink.textContent = "Post a Job";
+            postJobLink.href = "/JobUpload";
+          } else {
+            postJobLink.textContent = "Profile";
+            postJobLink.href = "/Profile";
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      }
+    };
+
+    if (userId) {
+      fetchUser();
+    } else {
+      const postJobLink = document.querySelector(
+        ".post-job-link"
+      ) as HTMLAnchorElement;
+      postJobLink.textContent = "Log In";
+      postJobLink.href = "/Login";
+    }
+  });
 </script>

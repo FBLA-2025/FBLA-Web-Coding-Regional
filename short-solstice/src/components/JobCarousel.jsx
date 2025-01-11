@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import JobModal from "./JobModal";
 import "../styles/JobCarousel.css";
 import baseURL from "../baseURL";
 
@@ -8,6 +9,7 @@ export default function JobCarousel() {
   const [jobs, setJobs] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(null);
+  const [selectedJob, setSelectedJob] = useState(null);
 
   const api = baseURL();
 
@@ -78,7 +80,9 @@ export default function JobCarousel() {
                 <p className="job-details">
                   {job.location} • {job.jobType}
                 </p>
-                <button variant="outline" className="details-button">
+                <button variant="outline" className="details-button" onClick={() => setSelectedJob(job)}>
+
+            {/* onClick={() => setSelectedJob(job)} */}
                   View Details
                 </button>
               </div>
@@ -88,6 +92,9 @@ export default function JobCarousel() {
           )}
         </div>
       </div>
+      {selectedJob && (
+        <JobModal job={selectedJob} onClose={() => setSelectedJob(null)} />
+      )}
     </section>
   );
 }

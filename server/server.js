@@ -599,7 +599,13 @@ app.post(
       };
 
       // Push the new notification object into the user's notifications array
-      user.notifications.push(newNotification);
+      user.notifications.unshift(newNotification);
+
+      user.markModified(
+        `appliedJobs.${user.appliedJobs.findIndex(
+          (app) => app.jobId.toString() === jobId
+        )}`
+      );
 
       // Save the updated user object
       await user.save();

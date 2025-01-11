@@ -7,7 +7,10 @@
   const logoutBtn = document.querySelector('.logout-btn') as HTMLButtonElement;
   logoutBtn.addEventListener('click', () => {
     localStorage.setItem('loggedIn', 'false');
-    window.location.href = '/Login';
+    localStorage.removeItem('currentUserId');
+    setTimeout(() => {
+      window.location.href = '/Login';
+    }, 200);
   });
 </script>
 

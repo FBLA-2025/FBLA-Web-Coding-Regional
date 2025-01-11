@@ -1,5 +1,14 @@
 import "../styles/JobModal.css";
 export default function JobModal({ job, onClose }) {
+  const handleApplyClick = () => {
+
+    if (localStorage.getItem("loggedIn") !== "true") {
+      alert("Please log in to apply for a job.");
+      window.location.href = "/Login";
+    } else {
+      window.location.href = `/apply/${job._id}`;
+    }
+  };
   return (
     <div className="modal-overlay">
       <div className="modal-container">
@@ -17,14 +26,18 @@ export default function JobModal({ job, onClose }) {
                     <p className="section-text">{job.companyDescription}</p>
                     <p className="section-text">Website: {job.website}</p>
                     <p className="section-text">Email: {job.companyEmail}</p>
-                    <p className="section-text">Phone Number: {job.companyPhoneNumber}</p>
+                    <p className="section-text">
+                      Phone Number: {job.companyPhoneNumber}
+                    </p>
                   </div>
 
                   <div>
                     <h4 className="section-title">Job Details</h4>
                     <p className="section-text">Type: {job.jobType}</p>
                     <p className="section-text">Location: {job.location}</p>
-                    <p className="section-text">Experience: {job.experienceLevel}</p>
+                    <p className="section-text">
+                      Experience: {job.experienceLevel}
+                    </p>
                     <p className="section-text">Schedule: {job.workSchedule}</p>
                     <p className="section-text">
                       Salary: ${job.salaryRange.minSalary.toLocaleString()} - $
@@ -34,7 +47,8 @@ export default function JobModal({ job, onClose }) {
                       Posted: {new Date(job.postedDate).toLocaleDateString()}
                     </p>
                     <p className="section-text important">
-                      Application Deadline: {new Date(job.applicationDeadline).toLocaleDateString()}
+                      Application Deadline:{" "}
+                      {new Date(job.applicationDeadline).toLocaleDateString()}
                     </p>
                   </div>
 
@@ -79,12 +93,20 @@ export default function JobModal({ job, onClose }) {
           </div>
 
           <div className="modal-footer">
-            <a
+            {/* <a
               href={`/apply/${job._id}`} // Pass jobId in the URL
               className="apply button"
             >
               Apply Now
-            </a>
+            </a> */}
+
+            <button
+              type="button"
+              onClick={handleApplyClick}
+              className="apply button"
+            >
+              Apply Now
+            </button>
 
             <button type="button" onClick={onClose} className="close button">
               Close

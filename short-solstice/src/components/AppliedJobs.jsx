@@ -22,7 +22,7 @@ export default function AppliedJobs() {
         );
         setAppliedJobs(response.data.appliedJobs);
         setIsEmployer(response.data.isEmployer);
-        // console.log(response.data)
+        console.log(response.data.appliedJobs)
       } catch (error) {
         console.error("Error fetching jobs:", error);
       }

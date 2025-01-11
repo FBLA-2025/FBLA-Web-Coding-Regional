@@ -53,6 +53,18 @@ const links = [
 
     const userId = localStorage.getItem("currentUserId");
 
+    const addHoverEffect = (link: HTMLAnchorElement) => {
+      link.style.transition = "all 0.3s ease";
+      link.addEventListener("mouseover", () => {
+        link.style.color = "#0971e9";
+        link.style.paddingLeft = "0.5vw";
+      });
+      link.addEventListener("mouseout", () => {
+        link.style.color = "#f7fafc";
+        link.style.paddingLeft = "0";
+      });
+    };
+
     const fetchUser = async () => {
       try {
         const response = await api.get(
@@ -60,8 +72,6 @@ const links = [
         );
         if (response.status === 200) {
           user = response.data;
-          console.log(localStorage.getItem("loggedIn"));
-          // console.log("User fetched from nav:", user);
 
           const navLinks = document.querySelector(".nav");
 
@@ -71,6 +81,7 @@ const links = [
             adminLink.className = "link";
             adminLink.textContent = "Admin Hub";
             navLinks.appendChild(adminLink);
+            addHoverEffect(adminLink);
           }
 
           if (user.isEmployer && navLinks) {
@@ -79,6 +90,7 @@ const links = [
             postJobLink.className = "link";
             postJobLink.textContent = "Post a Job";
             navLinks.appendChild(postJobLink);
+            addHoverEffect(postJobLink);
           }
 
           if (navLinks) {
@@ -87,6 +99,7 @@ const links = [
             loginLink.className = "link login";
             loginLink.textContent = "Log In";
             navLinks.appendChild(loginLink);
+            addHoverEffect(loginLink);
           }
 
           if (localStorage.getItem("loggedIn") === "true") {
@@ -105,19 +118,20 @@ const links = [
     if (userId !== null) {
       fetchUser();
     } else {
-      const navLinks = document.querySelectorAll(".nav-links");
+      const navLinks = document.querySelector(".nav");
       const loginLink = document.createElement("a");
       loginLink.href = "/Login";
-      loginLink.className =
-        "text-gray-800 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium login";
+      loginLink.className = "link";
       loginLink.textContent = "Log In";
       const loginLinkMobile = document.createElement("a");
       loginLinkMobile.href = "/Login";
       loginLinkMobile.className =
         "block text-gray-800 hover:text-blue-500 px-3 py-2 rounded-md text-base font-medium login";
       loginLinkMobile.textContent = "Log In";
-      navLinks[0].appendChild(loginLink);
-      navLinks[1].appendChild(loginLinkMobile);
+      if (navLinks) {
+        navLinks.appendChild(loginLink);
+      }
+      addHoverEffect(loginLink);
 
       if (localStorage.getItem("loggedIn") === "true") {
         // const loginLink = document.querySelectorAll(".login") as HTMLAnchorElement;
@@ -212,6 +226,7 @@ const links = [
     color: #fff;
     border: none;
     border-radius: 0.25rem;
+    transition: all 0.3s ease;
   }
   .subscribe-button:hover {
     background-color: #0056b3;

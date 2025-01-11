@@ -65,7 +65,7 @@ export default function ApplicantDetailsBody() {
       <p>Experience Level: {applicant.experienceLevel}</p>
       <p>Work Authorization: {applicant.workAuthorization}</p>
       <p>Comments: {applicant.comments}</p>
-      <p>About Me: {applicant.aboutMe}</p>
+      <p>About Me/Qualifications: {applicant.aboutMe}</p>
       <p>Date Applied: {formatDate(applicant.dateApplied)}</p>
       <h3>Status: {applicant.applicationStatus}</h3>
       <div className="status-buttons">

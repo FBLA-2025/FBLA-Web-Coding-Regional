@@ -1,10 +1,18 @@
+---
+import logo from "../../public/assets/talentlinklogo.svg";
+---
+
 <section class="career-section">
   <div class="container">
     <div class="header">
+      <div class="logo">
+        <img src={logo.src} alt="TalentLink Logo" />
+      </div>
       <div class="tagline">Career Development Center</div>
       <h2 class="title">Bridging Education and Opportunity</h2>
       <p class="description">
-        Our mission is to empower students with the resources and connections they need to launch successful careers.
+        Our mission is to empower students with the resources and connections
+        they need to launch successful careers.
       </p>
     </div>
 
@@ -55,6 +63,11 @@
   .header {
     text-align: center;
     margin-bottom: 3rem;
+  }
+  .logo {
+    width: 20%;
+    margin: auto;
+    margin-bottom: 2rem;
   }
   .tagline {
     display: inline-block;

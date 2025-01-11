@@ -1,7 +1,7 @@
 .applicant-name {
   color: #0971e9;
   font-size: 1.5rem;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 
 .applicant-details h3 {
@@ -35,16 +35,40 @@
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
 }
 
 .under-review-btn {
-  background-color: lightgray;
+  background-color: rgb(255, 216, 88);
+  color: rgb(80, 54, 6);
+}
+.under-review-btn:hover {
+  background-color: rgb(223, 190, 83);
 }
 
-/* .status-buttons button:hover {
-  background-color: #0366d6;
-} */
+.interview-btn {
+  background-color: #a9ddff;
+  color: #0c4a6e;
+}
+.interview-btn:hover {
+  background-color: #86bfe6;
+}
+
+.accept-btn {
+  background-color: #9dffcc;
+  color: #065F46;
+}
+.accept-btn:hover {
+  background-color: #7ad6a7;
+}
+
+.reject-btn {
+  background-color: #ffb1b1;
+  color: #6d1414;
+}
+.reject-btn:hover {
+  background-color: #da8686;
+}
 
 @media (max-width: 768px) {
   .status-buttons {
@@ -55,4 +79,3 @@
     flex: 1 0 calc(50% - 0.5rem);
   }
 }
-

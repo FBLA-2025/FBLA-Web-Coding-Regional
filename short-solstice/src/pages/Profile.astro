@@ -10,72 +10,6 @@ import PublishedJobs from "../components/PublishedJobs";
 import PendingJobs from "../components/PendingJobs";
 ---
 
-<!-- <Layout title="Your Profile | TalentLink">
-  <main class="profile-container">
-    <ProfileHeader />
-    <div class="profile-content">
-      <UserInfo client:load />
-      <div class="jobs-section">
-        <AppliedJobs client:load />
-        <PublishedJobs client:load />
-      </div>
-    </div>
-    <div id="notifications-container"></div>
-    <PendingJobs client:load />
-  </main>
-</Layout>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const isEmployer = localStorage.getItem('isEmployer');
-    if (isEmployer === 'true') {
-      document.body.classList.add('employer-view');
-    }
-
-    // Conditionally render Notifications component
-    if (isEmployer === 'false') {
-      const notificationsContainer = document.getElementById('notifications-container');
-      if (notificationsContainer) {
-        const notificationsComponent = document.createElement('div');
-        notificationsComponent.innerHTML = '<Notifications client:load />';
-        notificationsContainer.appendChild(notificationsComponent);
-      } else {
-        console.warn('notificationsContainer element not found');
-      }
-    }
-  });
-</script>
-
-<style>
-  .profile-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-  }
-
-  .profile-content {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-
-  @media (max-width: 1024px) {
-    .profile-content {
-      grid-template-columns: 1fr 1.5fr;
-      gap: 1.5rem;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .profile-content {
-      grid-template-columns: 1fr;
-    }
-    .profile-container {
-      padding: 1rem;
-    }
-  }
-</style> -->
 <Layout title="Profile">
   <NavBar />
   <main class="profile-container">
@@ -125,3 +59,10 @@ import PendingJobs from "../components/PendingJobs";
     }
   }
 </style>
+
+<script>
+  if (localStorage.getItem("loggedIn") !== "true") {
+    alert("You need to be logged in to view this page");
+    location.href = `/${localStorage.getItem("previousPage")}`;
+  }
+</script>
