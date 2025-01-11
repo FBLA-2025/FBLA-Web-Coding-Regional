@@ -185,6 +185,10 @@ export async function getStaticPaths() {
   import baseURL from "../../baseURL";
   const form = document.getElementById("apply-form") as HTMLFormElement | null;
   const userId = localStorage.getItem("currentUserId");
+  if (localStorage.getItem("loggedIn") === "false") {
+    alert("You must log in before applying to jobs!");
+    window.location.href = "/Login";
+  }
 
   if (form) {
     const jobId = form.name;

@@ -29,8 +29,8 @@
 }
 
 .status-buttons button {
-  background-color: #0971e9;
-  color: white;
+  /* background-color: #0971e9; */
+  /* color: white; */
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
@@ -38,9 +38,13 @@
   transition: background-color 0.2s;
 }
 
-.status-buttons button:hover {
-  background-color: #0366d6;
+.under-review-btn {
+  background-color: lightgray;
 }
+
+/* .status-buttons button:hover {
+  background-color: #0366d6;
+} */
 
 @media (max-width: 768px) {
   .status-buttons {

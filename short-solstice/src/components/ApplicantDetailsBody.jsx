@@ -69,16 +69,16 @@ export default function ApplicantDetailsBody() {
       <p>Date Applied: {formatDate(applicant.dateApplied)}</p>
       <h3>Status: {applicant.applicationStatus}</h3>
       <div className="status-buttons">
-        <button onClick={() => updateStatus("Under Review")}>
+        <button className="under-review-btn" onClick={() => updateStatus("Under Review")}>
           Under Review
         </button>
-        <button onClick={() => updateStatus("Interview Scheduled")}>
+        <button className="interview-btn" onClick={() => updateStatus("Interview Scheduled")}>
           Schedule Interview
         </button>
-        <button onClick={() => updateStatus("Offer Extended")}>
+        <button className="accept-btn" onClick={() => updateStatus("Offer Extended")}>
           Extend Offer
         </button>
-        <button onClick={() => updateStatus("Rejected")}>Reject</button>
+        <button className="reject-btn" onClick={() => updateStatus("Rejected")}>Reject</button>
       </div>
     </div>
   );
