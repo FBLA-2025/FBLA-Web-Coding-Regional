@@ -18,6 +18,24 @@ interface Job {
   jobName: string;
 }
 
+interface UserData {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+  school: string;
+  graduationDate: string;
+}
+
+let userData: UserData = {
+  firstName: "",
+  lastName: "",
+  phone: "",
+  email: "",
+  school: "",
+  graduationDate: "",
+};
+
 const api = baseURL();
 let jobs: Job[] = [];
 const response = await api.get("/find/TalentLinkDB/published_jobs");
@@ -76,7 +94,7 @@ export async function getStaticPaths() {
     <!-- FormLabel Components -->
     <FormLabel
       labelTitle="Name"
-      inputValue=""
+      inputValue={userData.firstName}
       labelFor="phone"
       labelType="text"
       id="first-name"
@@ -85,7 +103,7 @@ export async function getStaticPaths() {
 
     <FormLabel
       labelTitle="Last Name"
-      inputValue=""
+      inputValue={userData.lastName}
       labelFor="last-name"
       labelType="text"
       id="last-name"
@@ -93,7 +111,7 @@ export async function getStaticPaths() {
     />
     <FormLabel
       labelTitle="Phone Number"
-      inputValue=""
+      inputValue={userData.phone}
       labelFor="phone"
       labelType="tel"
       id="phone"
@@ -101,7 +119,7 @@ export async function getStaticPaths() {
     />
     <FormLabel
       labelTitle="Email Address"
-      inputValue=""
+      inputValue={userData.email}
       labelFor="email"
       labelType="email"
       id="email"
@@ -109,7 +127,7 @@ export async function getStaticPaths() {
     />
     <FormLabel
       labelTitle="Unversity Name"
-      inputValue=""
+      inputValue={userData.school}
       labelFor="school"
       labelType="text"
       id="school"
@@ -118,7 +136,7 @@ export async function getStaticPaths() {
 
     <FormLabel
       labelTitle="Graduation Date"
-      inputValue=""
+      inputValue={userData.graduationDate}
       labelFor="graduation-date"
       labelType="date"
       id="graduation-date"
@@ -131,14 +149,6 @@ export async function getStaticPaths() {
       label="Foreign Language?"
       disabledOption="Foreign Languages"
       options={["None", "Other"]}
-    />
-
-    <SelectForm
-      selectId="jobRole"
-      selectName="jobRole"
-      label="Select Your Role"
-      disabledOption="Choose a role"
-      options={["Developer", "Designer", "Manager"]}
     />
 
     <RadioForm
@@ -183,43 +193,84 @@ export async function getStaticPaths() {
 
 <script>
   import baseURL from "../../baseURL";
-  const form = document.getElementById("apply-form") as HTMLFormElement | null;
-  const userId = localStorage.getItem("currentUserId");
+  // import ApplicantDetails from "../ApplicantDetails.astro";
+  document.addEventListener("DOMContentLoaded", async () => {
+    const form = document.getElementById(
+      "apply-form"
+    ) as HTMLFormElement | null;
+    const userId = localStorage.getItem("currentUserId");
+    const api = baseURL();
 
-  if (form) {
-    const jobId = form.name;
-    console.log("Job ID:", jobId);
-    form.addEventListener("submit", (event) => {
-      event.preventDefault(); // Prevent actual form submission for testing
-      const formData = new FormData(form);
-      const userApplication = Object.fromEntries(formData.entries());
-      userApplication.jobId = jobId;
-      if (userId) {
-        userApplication.userId = userId;
-      }
-      console.log("User Application:", userApplication);
-
-      const api = baseURL();
-      const postApplication = async () => {
-        try {
-          const response = await api.post(
-            "/user-apply/TalentLinkDB/users",
-            userApplication
-          );
-          if (response.status === 201) {
-            console.log("User created successfully!");
-            window.location.href = "/Profile";
+    if (userId) {
+      console.log("User ID:", userId);
+      try {
+        const response = await api.get(`/retrieve-user/TalentLinkDB/users/${userId}`);
+        if (response.status === 200) {
+          const data = response.data;
+          console.log("User Data:", data);
+          const nameInput = document.getElementById(
+            "first-name"
+          ) as HTMLInputElement;
+          if (nameInput) {
+            nameInput.value = data.firstName;
           }
-        } catch (error) {
-          console.error("Error fetching jobs:", error);
-          if (error instanceof Error) {
-            if (error.message.includes("409")) {
-              alert(`Already applied to this job!`);
-            }
+          const lastNameInput = document.getElementById("last-name") as HTMLInputElement;
+          if (lastNameInput) {
+            lastNameInput.value = data.lastName;
+          }
+          const phoneInput = document.getElementById("phone") as HTMLInputElement;
+          if (phoneInput) {
+            // phoneInput.value = data.phone;
+          }
+          const emailInput = document.getElementById("email") as HTMLInputElement;
+          if (emailInput) {
+            emailInput.value = data.email;
+          }
+          const schoolInput = document.getElementById("school") as HTMLInputElement;
+          if (schoolInput) {
+            schoolInput.value = data.school;
           }
         }
-      };
-      postApplication();
-    });
-  }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    }
+
+    if (form) {
+      const jobId = form.name;
+      console.log("Job ID:", jobId);
+      form.addEventListener("submit", (event) => {
+        event.preventDefault(); // Prevent actual form submission for testing
+        const formData = new FormData(form);
+        const userApplication = Object.fromEntries(formData.entries());
+        userApplication.jobId = jobId;
+        if (userId) {
+          userApplication.userId = userId;
+        }
+        console.log("User Application:", userApplication);
+
+        const api = baseURL();
+        const postApplication = async () => {
+          try {
+            const response = await api.post(
+              "/user-apply/TalentLinkDB/users",
+              userApplication
+            );
+            if (response.status === 201) {
+              console.log("User created successfully!");
+              window.location.href = "/Profile";
+            }
+          } catch (error) {
+            console.error("Error fetching jobs:", error);
+            if (error instanceof Error) {
+              if (error.message.includes("409")) {
+                alert(`Already applied to this job!`);
+              }
+            }
+          }
+        };
+        postApplication();
+      });
+    }
+  });
 </script>
