@@ -16,6 +16,16 @@ GET {{baseUrl}}/find/TalentLinkDB/pending_jobs
 Content-Type: application/json
 
 ###
+POST {{baseUrl}}/insert/TalentLinkDB/subscribed_emails
+Content-Type: application/json
+
+{
+    "document": {
+        "email": "talentlinkcto@outlook.com"
+    }
+}
+
+###
 # Test POST /insert/:database/:collection
 ###
 # Insert a single Product

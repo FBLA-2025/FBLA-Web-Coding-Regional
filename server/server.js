@@ -3,6 +3,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const path = require("path");
+// const nodemailer = require("nodemailer");
+
 
 // Load environment variables
 dotenv.config({
@@ -30,6 +32,8 @@ app.use(express.json()); // To parse JSON bodies
 // Import Schemas
 const userSchema = require("./models/Users");
 const jobSchema = require("./models/Jobs");
+const SubscribedSchema = require("./models/Subscribed");
+
 
 // Mapping of database names to their respective URIs
 const uriMap = {
@@ -88,10 +92,15 @@ const getModel = async (dbName, collectionName) => {
       case "pending_jobs":
         schema = jobSchema;
         break;
+      case "subscribed":
+        schema = SubscribedSchema;
+        break;
+      case "subscribed_emails":  // Added case for 'subscribed_emails'
+        schema = SubscribedSchema;
+        break;
       default:
         throw new Error(`No schema defined for collection: ${collectionName}`);
     }
-
     models[modelKey] = connection.model(collectionName, schema, collectionName);
     console.log(`Created new model for collection: ${collectionName}`);
   } else {
@@ -234,7 +243,57 @@ app.post("/sign-up/:database/:collection", async (req, res) => {
   }
 });
 
-// POST route to sign up a new user
+
+// POST route for subcribed users on skkibidi my sigma
+
+app.post("/subscribed_emails/:database/:collection", async (req, res) => {
+  try {
+    const { database, collection } = req.params;
+    // const { username, email, password } = req.body;
+    const {
+      email,
+    } = req.body;
+
+    const Model = await getModel(database, collection);
+    console.log("Model retrieved, executing save query");
+
+    // Check if a user with the same email already exists
+    const existingUser = await Model.findOne({
+      email: email,
+    }).lean();
+    if (existingUser) {
+      throw new Error(`User with email ${email} already exists`);
+    }
+
+    const newUser = new Model({
+      email: email,
+
+    });
+    await newUser.save();
+
+    console.log(`Successfully created user: ${newUser} with email: ${email}`);
+    res.status(201).json(newUser);
+  } catch (err) {
+    if (err.message.includes("User with email")) {
+      console.error(
+        "User with email already exists, returning 409 status code"
+      );
+      res
+        .status(409)
+        .json({ error: "User with the same email already exists" });
+    } else {
+      console.error("Error in POST routeu:", err);
+      res.status(500).json({ error: err.message });
+    }
+  }
+});
+
+
+
+
+
+
+// POST route so an user can apply to a job
 app.post("/user-apply/:database/:collection", async (req, res) => {
   try {
     const { database, collection } = req.params;
@@ -655,6 +714,11 @@ app.post(
     }
   }
 );
+
+
+//sigma balls
+
+
 
 // ******************** FOR TESTING PURPOSES ************************
 
