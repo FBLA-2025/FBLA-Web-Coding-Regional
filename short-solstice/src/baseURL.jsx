@@ -5,7 +5,7 @@ export default function baseURL() {
         // run a code space on main
         // command: npm run start:prod
         // go to ports tab in terminal and make the 3000 port public under the visibility column
-        baseURL: "https://verbose-memory-5gxr6rr59j5h74wq-3000.app.github.dev/",
+        baseURL: "https://fuzzy-spork-jj579vr4j46rcjjqg-3000.app.github.dev/",
         //replace with own uri
     });
     return api;
