@@ -24,8 +24,8 @@ Content-Type: application/json
 
 {
     "document": {
-        "firstName": "Leo",
-        "lastName": "Marquez",
+        "firstName": "John",
+        "lastName": "Smith",
         "school": null,
         "graduationYear": null,
         "major": null,
@@ -36,7 +36,7 @@ Content-Type: application/json
         "companySize": "501-1000 employees",
         "publishedJobs": [],
         "pendingJobs": [],
-        "email": "talentlinkcto@outlook.com",
+        "email": "talentlinkceo@gmail.com",
         "password": "password123",
         "isAdmin": true,
         "isEmployer": true

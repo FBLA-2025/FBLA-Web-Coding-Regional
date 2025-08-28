@@ -218,6 +218,7 @@ app.post("/sign-up/:database/:collection", async (req, res) => {
     await newUser.save();
 
     console.log(`Successfully created user: ${newUser} with email: ${email}`);
+    console/log("Saved to database: ", database)
     res.status(201).json(newUser);
   } catch (err) {
     if (err.message.includes("User with email")) {
